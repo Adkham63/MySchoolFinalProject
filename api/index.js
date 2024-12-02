@@ -5,6 +5,7 @@ const User = require("./models/User.js");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const cookieParser = require("cookie-parser");
+const imageDownloader = require("image-downloader");
 require("dotenv").config();
 
 const app = express();
@@ -17,6 +18,7 @@ app.use(express.json());
 
 app.use(cookieParser()); //cookieParser
 app.use(cors({ credentials: true, origin: "http://localhost:5173" }));
+app.use("/uploads", express.static(__dirname + "/uploads"));
 
 console.log(process.env.MONGO_URL);
 
@@ -92,6 +94,25 @@ app.get("/api/profile", (req, res) => {
 
 app.post("/logout", (req, res) => {
   res.cookie("token", "").json(true);
+});
+
+app.post("/api/upload-by-link", async (req, res) => {
+  const { link } = req.body;
+  const newName = "photo" + Date.now() + ".jpg";
+
+  try {
+    await imageDownloader.image({
+      url: link,
+      dest: __dirname + "/uploads/" + newName,
+    });
+    console.log("Image downloaded and saved:", `/uploads/${newName}`);
+    res.json(`/uploads/${newName}`);
+  } catch (err) {
+    console.error("Error downloading image:", err);
+    res
+      .status(500)
+      .json({ error: "Failed to download image", details: err.message });
+  }
 });
 
 // Start the server
