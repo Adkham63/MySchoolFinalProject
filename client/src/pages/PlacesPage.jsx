@@ -48,6 +48,27 @@ const PlacesPage = () => {
     }
   }
 
+  function uploadPhoto(ev) {
+    const files = ev.target.files;
+    console.log({ files });
+    const data = new FormData();
+    for (let i = 0; i < files.length; i++) {
+      data.append("photos", files[i]);
+    }
+
+    axios
+      .post("/api/upload", data, {
+        headers: { "Content-type": "multipart/form-data" },
+      })
+      .then((response) => {
+        const { data: filenames } = response;
+        console.log(response.data);
+        setAddedPhotos((prev) => {
+          return [...prev, ...filenames];
+        }); // Add new photo to state
+      });
+  }
+
   return (
     <div>
       {action !== "new" && (
@@ -113,14 +134,20 @@ const PlacesPage = () => {
                 addedPhotos.map((link, index) => (
                   <div key={index}>
                     <img
-                      src={`http://localhost:4000${link}`} // Correct image path
+                      src={`http://localhost:4000${link}`} // Ensure link is correct
                       alt={`Uploaded ${index}`}
                       className="w-full h-40 object-cover rounded-lg"
                     />
                   </div>
                 ))}
 
-              <button className="flex justify-center gap-1 border bg-transparent rounded-2xl p-8 text-2xl text-gray-600">
+              <label className="flex items-center gap-1 border bg-transparent rounded-2xl p-8 text-2xl text-gray-600 cursor-pointer">
+                <input
+                  type="file"
+                  multiple
+                  className="hidden"
+                  onChange={uploadPhoto}
+                />
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -136,7 +163,7 @@ const PlacesPage = () => {
                   />
                 </svg>
                 Upload
-              </button>
+              </label>
             </div>
             {preInput("Description", "Description of the place")}
             <textarea

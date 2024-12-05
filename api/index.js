@@ -6,6 +6,9 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const cookieParser = require("cookie-parser");
 const imageDownloader = require("image-downloader");
+const multer = require("multer");
+const fs = require("fs");
+const path = require("path"); // Import path module
 require("dotenv").config();
 
 const app = express();
@@ -103,7 +106,7 @@ app.post("/api/upload-by-link", async (req, res) => {
   try {
     await imageDownloader.image({
       url: link,
-      dest: __dirname + "/uploads/" + newName,
+      dest: path.join(__dirname, "uploads", newName), // Fix path
     });
     console.log("Image downloaded and saved:", `/uploads/${newName}`);
     res.json(`/uploads/${newName}`);
@@ -113,6 +116,19 @@ app.post("/api/upload-by-link", async (req, res) => {
       .status(500)
       .json({ error: "Failed to download image", details: err.message });
   }
+});
+
+const photosMiddleware = multer({ dest: "uploads/" }); // Fix path
+app.post("/api/upload", photosMiddleware.array("photos", 100), (req, res) => {
+  const uploadedFiles = [];
+  for (let i = 0; i < req.files.length; i++) {
+    const { path: filePath, originalname } = req.files[i];
+    const ext = path.extname(originalname); // Use path.extname to get file extension
+    const newPath = path.join(__dirname, "uploads", `${Date.now()}${ext}`); // Ensure correct path
+    fs.renameSync(filePath, newPath);
+    uploadedFiles.push(`/uploads/${path.basename(newPath)}`); // Fix path to be accessible via URL
+  }
+  res.json(uploadedFiles); // Send the corrected paths
 });
 
 // Start the server
