@@ -1,22 +1,15 @@
-import React, { useContext, useState } from "react";
-import { UserContext } from "../UserContext.jsx"; // Ensure you import the correct context
-import { Link, Navigate, useParams } from "react-router-dom";
-import axios from "axios";
-import PlacesPage from "./PlacesPage.jsx";
+import React from "react";
+import { Link, useLocation } from "react-router-dom";
 
-const AccountPage = () => {
-  const { user, ready, setUser } = useContext(UserContext); // Access setUser here
-  const { subpage } = useParams(); // Get subpage from the route
-  const [redirect, setRedirect] = useState(null);
+const AccountNav = () => {
+  // Get the current location (current URL) using useLocation
+  const location = useLocation();
+  console.log(location); // This will log the location object in the console for debugging
 
-  // Return loading state if data is not ready
-  if (!ready) {
-    return <div>Loading...</div>;
-  }
-
-  // Redirect to login if user is not authenticated
-  if (!user && ready && !redirect) {
-    return <Navigate to={"/api/login"} />;
+  // Extract subpage from the pathname
+  let subpage = location.pathname.split("/")[2]; // The part after "/account/"
+  if (subpage === undefined) {
+    subpage = "profile"; // Default to "profile" if no subpage is specified
   }
 
   // Function to conditionally add classes for active link
@@ -27,25 +20,14 @@ const AccountPage = () => {
     } else {
       classes += " bg-gray-200";
     }
-    return classes; // Make sure to return the generated classes
-  }
-
-  // Logout function with error handling
-  async function logout() {
-    await axios.post("/logout"); // Sends logout request to the backend
-    setUser(null); // Clear user from context after logout
-    setRedirect("/"); // Redirect to home page after logout
-  }
-
-  if (redirect) {
-    return <Navigate to={redirect} />; // Use Navigate for redirect after logout
+    return classes; // Return the generated classes
   }
 
   return (
-    <div>
+    <>
       <nav className="w-full flex justify-center mt-8 gap-2 mb-8">
         {/* Ensure the path matches for active subpage */}
-        <Link className={linkClasses("profile")} to={"/account/profile"}>
+        <Link className={linkClasses("profile")} to={"/account"}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -97,30 +79,8 @@ const AccountPage = () => {
           My Accommodations
         </Link>
       </nav>
-
-      {/* Conditional rendering based on subpage */}
-      {subpage === "profile" && (
-        <div className="text-center max-w-lg mx-auto">
-          Logged in as {user.name} ({user.email})<br />
-          <button onClick={logout} className="primary max-w-sm mt-2">
-            Log out
-          </button>
-        </div>
-      )}
-
-      {subpage === "bookings" && (
-        <div>
-          <p>Bookings section content...</p>
-        </div>
-      )}
-
-      {subpage === "places" && (
-        <div>
-          <PlacesPage />
-        </div>
-      )}
-    </div>
+    </>
   );
 };
 
-export default AccountPage;
+export default AccountNav;
