@@ -1,19 +1,30 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import AccountNav from "../AccountNav";
-
+import axios from "axios";
 
 const PlacesPage = () => {
   const { action } = useParams(); // Get 'action' param from the URL
+  const [places, setPlaces] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get("/api/places")
+      .then(({ data }) => {
+        setPlaces(data);
+      })
+      .catch((error) => {
+        console.error("Error fetching places:", error);
+      });
+  }, []);
 
   return (
     <>
-      <AccountNav /> {/* Display account navigation */}
-      {/* If 'action' is not 'new', show the button to add a new place */}
+      <AccountNav />
       {action !== "new" && (
         <div className="text-center">
           <Link
-            to="/account/places/new" // Link to the page for creating a new place
+            to="/account/places/new"
             className="inline-flex gap-1 bg-primary text-white py-2 px-6 rounded-full"
           >
             <svg
@@ -32,6 +43,38 @@ const PlacesPage = () => {
           </Link>
         </div>
       )}
+      <div className="mt-4">
+        {places.length > 0 &&
+          places.map((place) => {
+            // Log the photos for debugging
+            console.log(place.addedPhotos); // To inspect what you are receiving
+
+            return (
+              <Link
+                to={`/account/places/${place._id}`}
+                className="flex gap-4 cursor-pointer bg-gray-200 p-4 rounded-2xl"
+                key={place._id}
+              >
+                <div className="flex w-32 h-32 bg-gray-100 grow shrink-0">
+                  {place.addedPhotos &&
+                    Array.isArray(place.addedPhotos) &&
+                    place.addedPhotos.length > 0 && (
+                      <img
+                        key={place._id}
+                        src={`http://localhost:4000${place.addedPhotos[0]}`} // Display only the first image
+                        alt={place.title}
+                        className="object-cover w-full h-full"
+                      />
+                    )}
+                </div>
+                <div className="grow-0 shrink">
+                  <h2 className="text-xl">{place.title}</h2>
+                  <p className="text-sm mt-2">{place.description}</p>
+                </div>
+              </Link>
+            );
+          })}
+      </div>
     </>
   );
 };

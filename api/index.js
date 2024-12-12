@@ -22,7 +22,7 @@ app.use(express.json());
 
 app.use(cookieParser()); //cookieParser
 app.use(cors({ credentials: true, origin: "http://localhost:5173" }));
-app.use("/uploads", express.static(__dirname + "/uploads"));
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 console.log(process.env.MONGO_URL);
 
@@ -132,6 +132,7 @@ app.post("/api/upload", photosMiddleware.array("photos", 100), (req, res) => {
   res.json(uploadedFiles); // Send the corrected paths
 });
 
+// Place Creation
 app.post("/api/places", (req, res) => {
   const { token } = req.cookies;
   const {
@@ -145,10 +146,97 @@ app.post("/api/places", (req, res) => {
     checkOut,
     maxGuests,
   } = req.body;
+
+  if (!token) return res.status(401).json("Unauthorized");
+
   jwt.verify(token, jwtSecret, {}, async (err, userData) => {
-    if (err) throw err;
-    const placeDoc = await Place.create({
-      owner: userData.id,
+    if (err) return res.status(403).json("Invalid token");
+
+    try {
+      const placeDoc = await Place.create({
+        owner: userData.id,
+        title,
+        address,
+        addedPhotos,
+        description,
+        perks,
+        extraInfo,
+        checkIn,
+        checkOut,
+        maxGuests,
+      });
+      res.json(placeDoc);
+    } catch (err) {
+      res
+        .status(500)
+        .json({ error: "Failed to create place", details: err.message });
+    }
+  });
+});
+
+// Fetch User's Places
+app.get("/api/places", (req, res) => {
+  const { token } = req.cookies;
+  if (!token) return res.status(401).json("Unauthorized");
+
+  jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+    if (err) return res.status(403).json("Invalid token");
+
+    try {
+      const places = await Place.find({ owner: userData.id });
+      res.json(places);
+    } catch (err) {
+      res
+        .status(500)
+        .json({ error: "Failed to fetch places", details: err.message });
+    }
+  });
+});
+
+app.get("/api/places/:id", async (req, res) => {
+  const { id } = req.params;
+  res.json(await Place.findById(id));
+});
+
+app.put("/api/places/:id", async (req, res) => {
+  const { token } = req.cookies;
+  const {
+    title,
+    address,
+    addedPhotos,
+    description,
+    perks,
+    extraInfo,
+    checkIn,
+    checkOut,
+    maxGuests,
+  } = req.body;
+
+  if (!token) {
+    return res.status(401).json("Unauthorized: No token provided");
+  }
+
+  try {
+    // Verify the JWT token
+    const userData = jwt.verify(token, jwtSecret);
+
+    // Use req.params.id to get the place ID from the URL
+    const placeDoc = await Place.findById(req.params.id); // Correct way to access the 'id'
+
+    // Check if the place exists
+    if (!placeDoc) {
+      return res.status(404).json("Place not found");
+    }
+
+    // Check if the logged-in user is the owner of the place
+    if (userData.id !== placeDoc.owner.toString()) {
+      return res
+        .status(403)
+        .json("Unauthorized: You are not the owner of this place");
+    }
+
+    // Update the place with the new data
+    placeDoc.set({
       title,
       address,
       addedPhotos,
@@ -159,8 +247,17 @@ app.post("/api/places", (req, res) => {
       checkOut,
       maxGuests,
     });
-    res.json(placeDoc);
-  });
+
+    // Save the updated place
+    await placeDoc.save();
+
+    // Send a success response
+    res.json("Place updated successfully");
+  } catch (err) {
+    // Handle errors (invalid token, database errors, etc.)
+    console.error(err);
+    res.status(500).json({ error: "Server error", details: err.message });
+  }
 });
 
 // Start the server

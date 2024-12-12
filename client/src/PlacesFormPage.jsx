@@ -1,12 +1,12 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Navigate, useParams } from "react-router-dom";
 import axios from "axios";
 import Perks from "./Perks.jsx";
 import PhotosUploader from "./PhotosUploader";
 import AccountNav from "./AccountNav.jsx";
 
 const PlacesFormPage = () => {
-  const navigate = useNavigate();
+  const { id } = useParams();
   const [title, setTitle] = useState("");
   const [address, setAddress] = useState("");
   const [description, setDescription] = useState("");
@@ -17,116 +17,154 @@ const PlacesFormPage = () => {
   const [maxGuests, setMaxGuests] = useState(1);
   const [addedPhotos, setAddedPhotos] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [redirect, setRedirect] = useState(false);
 
-  function inputHeader(text) {
-    return <h2 className="text-2xl mt-4">{text}</h2>;
-  }
+  // Fetch place details when editing
+  useEffect(() => {
+    if (!id) return;
 
-  function inputDescription(text) {
-    return <p className="text-gray-500 text-sm">{text}</p>;
-  }
-
-  function preInput(header, description) {
-    return (
-      <>
-        {inputHeader(header)}
-        {inputDescription(description)}
-      </>
-    );
-  }
-
-  async function addNewPlace(ev) {
-    ev.preventDefault();
-    if (!title || !address || !description || !checkIn || !checkOut) {
-      alert("Please fill in all required fields.");
-      return;
-    }
-    setIsSubmitting(true);
-    try {
-      await axios.post("/api/places", {
-        title,
-        address,
-        addedPhotos,
-        description,
-        perks,
-        extraInfo,
-        checkIn,
-        checkOut,
-        maxGuests,
+    axios
+      .get(`/api/places/${id}`)
+      .then((response) => {
+        const { data } = response;
+        setTitle(data.title);
+        setAddress(data.address);
+        setAddedPhotos((prev) => {
+          const uniquePhotos = [
+            ...new Set([...prev, ...(data.addedPhotos || [])]),
+          ];
+          return uniquePhotos;
+        });
+        setDescription(data.description);
+        setPerks(data.perks);
+        setExtraInfo(data.extraInfo);
+        setCheckIn(data.checkIn);
+        setCheckOut(data.checkOut);
+        setMaxGuests(data.maxGuests);
+      })
+      .catch((error) => {
+        console.error("Error fetching place details:", error);
       });
-      navigate("/account/places");
+  }, [id]);
+
+  const savePlace = async (ev) => {
+    ev.preventDefault();
+
+    const placeData = {
+      title,
+      address,
+      addedPhotos: [...new Set(addedPhotos)], // Ensure no duplicates before saving
+      description,
+      perks,
+      extraInfo,
+      checkIn,
+      checkOut,
+      maxGuests,
+    };
+
+    try {
+      if (id) {
+        // Update existing place
+        await axios.put(`/api/places/${id}`, placeData);
+      } else {
+        // Create a new place
+        await axios.post("/api/places", placeData);
+      }
+      setRedirect(true);
     } catch (error) {
-      console.error("Failed to add new place:", error);
-      alert("Error saving place. Please try again.");
-    } finally {
-      setIsSubmitting(false);
+      console.error("Error saving place:", error);
     }
+  };
+
+  if (redirect) {
+    return <Navigate to="/account/places" />;
   }
+
+  // Helper function to generate form fields
+  const preInput = (label, placeholder) => {
+    return (
+      <div>
+        <h2 className="text-2xl mt-4">{label}</h2>
+        <input type="text" placeholder={placeholder} />
+      </div>
+    );
+  };
 
   return (
     <div>
       <AccountNav />
-      <form onSubmit={addNewPlace}>
-        {preInput("Title", "Title for your place should be short and catchy")}
+      <form onSubmit={savePlace}>
+        <h2 className="text-2xl mt-4">Title</h2>
         <input
           value={title}
           onChange={(ev) => setTitle(ev.target.value)}
           type="text"
           placeholder="e.g. My lovely apartment"
         />
-        {preInput("Address", "Where is your place located?")}
+        <h2 className="text-2xl mt-4">Address</h2>
         <input
           value={address}
           onChange={(ev) => setAddress(ev.target.value)}
           type="text"
           placeholder="e.g. 123 Main St"
         />
-        {preInput("Photos", "Upload images of your place")}
+        <h2 className="text-2xl mt-4">Photos</h2>
         <PhotosUploader addedPhotos={addedPhotos} onChange={setAddedPhotos} />
-        {preInput("Description", "Describe your place")}
-        <textarea
-          value={description}
-          onChange={(ev) => setDescription(ev.target.value)}
-        />
-        {preInput("Perks", "Select all the perks of your place")}
-        <Perks selected={perks} onChange={setPerks} />
-        {preInput("Extra Info", "Include any additional details")}
-        <textarea
-          value={extraInfo}
-          onChange={(ev) => setExtraInfo(ev.target.value)}
-        />
-        {preInput(
-          "Check-in & Check-out",
-          "Provide check-in and check-out times"
-        )}
-        <div className="grid sm:grid-cols-3 gap-2">
-          <div>
-            <h3>Check-in time</h3>
-            <input
-              value={checkIn}
-              onChange={(ev) => setCheckIn(ev.target.value)}
-              type="text"
-              placeholder="e.g. 14:00"
-            />
-          </div>
-          <div>
-            <h3>Check-out time</h3>
-            <input
-              value={checkOut}
-              onChange={(ev) => setCheckOut(ev.target.value)}
-              type="text"
-              placeholder="e.g. 11:00"
-            />
-          </div>
-          <div>
-            <h3>Max guests</h3>
-            <input
-              value={maxGuests}
-              onChange={(ev) => setMaxGuests(ev.target.value)}
-              type="number"
-            />
+
+        {/* Replacing preInput function calls */}
+        <div>
+          <h2 className="text-2xl mt-4">Description</h2>
+          <textarea
+            value={description}
+            onChange={(ev) => setDescription(ev.target.value)}
+          />
+        </div>
+
+        <div>
+          <h2 className="text-2xl mt-4">Perks</h2>
+          <Perks selected={perks} onChange={setPerks} />
+        </div>
+
+        <div>
+          <h2 className="text-2xl mt-4">Extra Info</h2>
+          <textarea
+            value={extraInfo}
+            onChange={(ev) => setExtraInfo(ev.target.value)}
+          />
+        </div>
+
+        <div>
+          <h2 className="text-2xl mt-4">Check-in & Check-out</h2>
+          <div className="grid sm:grid-cols-3 gap-2">
+            <div>
+              <h3>Check-in time</h3>
+              <input
+                value={checkIn}
+                onChange={(ev) => setCheckIn(ev.target.value)}
+                type="text"
+                placeholder="e.g. 14:00"
+              />
+            </div>
+            <div>
+              <h3>Check-out time</h3>
+              <input
+                value={checkOut}
+                onChange={(ev) => setCheckOut(ev.target.value)}
+                type="text"
+                placeholder="e.g. 11:00"
+              />
+            </div>
+            <div>
+              <h3>Max guests</h3>
+              <input
+                value={maxGuests}
+                onChange={(ev) => setMaxGuests(ev.target.value)}
+                type="number"
+              />
+            </div>
           </div>
         </div>
+
         <div>
           <button className="primary my-4" disabled={isSubmitting}>
             {isSubmitting ? "Saving..." : "Save"}

@@ -2,17 +2,16 @@ const mongoose = require("mongoose");
 
 const placeSchema = new mongoose.Schema({
   owner: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-  title: String,
-  address: String,
-  photos: [String],
-  description: String,
+  title: { type: String, required: true },
+  address: { type: String, required: true },
+  addedPhotos: [String],
+  description: { type: String, required: true },
   perks: [String],
   extraInfo: String,
-  checkIn: Number,
-  checkOut: Number,
-  maxGuests: Number,
+  checkIn: { type: String, required: true }, // Changed to String
+  checkOut: { type: String, required: true }, // Changed to String
+  maxGuests: { type: Number, required: true },
 });
 
-const PlaceModel = mongoose.model("Place", placeSchema);
-
-module.exports = PlaceModel;
+const Place = mongoose.model("Place", placeSchema);
+module.exports = Place;
