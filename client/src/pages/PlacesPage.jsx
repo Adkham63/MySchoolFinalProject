@@ -9,7 +9,7 @@ const PlacesPage = () => {
 
   useEffect(() => {
     axios
-      .get("/api/places")
+      .get("/api/user-places")
       .then(({ data }) => {
         setPlaces(data);
       })
@@ -46,30 +46,37 @@ const PlacesPage = () => {
       <div className="mt-4">
         {places.length > 0 &&
           places.map((place) => {
-            // Log the photos for debugging
-            console.log(place.addedPhotos); // To inspect what you are receiving
-
             return (
               <Link
                 to={`/account/places/${place._id}`}
-                className="flex gap-4 cursor-pointer bg-gray-200 p-4 rounded-2xl"
+                className="flex gap-4 cursor-pointer bg-gray-200 p-4 rounded-2xl mb-4 items-start"
                 key={place._id}
               >
-                <div className="flex w-32 h-32 bg-gray-100 grow shrink-0">
+                <div className="h-32 w-32 flex-shrink-0">
                   {place.addedPhotos &&
                     Array.isArray(place.addedPhotos) &&
                     place.addedPhotos.length > 0 && (
                       <img
-                        key={place._id}
-                        src={`http://localhost:4000${place.addedPhotos[0]}`} // Display only the first image
+                        src={`http://localhost:4000${place.addedPhotos[0]}`}
                         alt={place.title}
-                        className="object-cover w-full h-full"
+                        className="rounded-xl object-cover w-full h-full"
                       />
                     )}
                 </div>
-                <div className="grow-0 shrink">
-                  <h2 className="text-xl">{place.title}</h2>
-                  <p className="text-sm mt-2">{place.description}</p>
+                <div className="flex-grow">
+                  <h2 className="text-xl font-semibold truncate">
+                    {place.title}
+                  </h2>
+                  <p
+                    className="text-sm mt-2 text-gray-700 line-clamp-3 overflow-hidden"
+                    style={{
+                      display: "-webkit-box",
+                      WebkitLineClamp: "3",
+                      WebkitBoxOrient: "vertical",
+                    }}
+                  >
+                    {place.description}
+                  </p>
                 </div>
               </Link>
             );

@@ -175,22 +175,26 @@ app.post("/api/places", (req, res) => {
 });
 
 // Fetch User's Places
-app.get("/api/places", (req, res) => {
+app.get("/api/user-places", async (req, res) => {
   const { token } = req.cookies;
+
   if (!token) return res.status(401).json("Unauthorized");
 
-  jwt.verify(token, jwtSecret, {}, async (err, userData) => {
-    if (err) return res.status(403).json("Invalid token");
+  try {
+    // Verify JWT token
+    const userData = jwt.verify(token, jwtSecret);
 
-    try {
-      const places = await Place.find({ owner: userData.id });
-      res.json(places);
-    } catch (err) {
-      res
-        .status(500)
-        .json({ error: "Failed to fetch places", details: err.message });
-    }
-  });
+    // Fetch places owned by the user
+    const places = await Place.find({ owner: userData.id });
+
+    // Respond with the places
+    res.json(places);
+  } catch (err) {
+    console.error(err);
+    res
+      .status(500)
+      .json({ error: "Failed to fetch places", details: err.message });
+  }
 });
 
 app.get("/api/places/:id", async (req, res) => {
@@ -258,6 +262,10 @@ app.put("/api/places/:id", async (req, res) => {
     console.error(err);
     res.status(500).json({ error: "Server error", details: err.message });
   }
+});
+
+app.get("/api/places", async (req, res) => {
+  res.json(await Place.find());
 });
 
 // Start the server
