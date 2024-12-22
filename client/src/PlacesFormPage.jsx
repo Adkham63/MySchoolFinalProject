@@ -15,6 +15,7 @@ const PlacesFormPage = () => {
   const [checkIn, setCheckIn] = useState("");
   const [checkOut, setCheckOut] = useState("");
   const [maxGuests, setMaxGuests] = useState(1);
+  const [price, setPrice] = useState(100);
   const [addedPhotos, setAddedPhotos] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [redirect, setRedirect] = useState(false);
@@ -41,6 +42,7 @@ const PlacesFormPage = () => {
         setCheckIn(data.checkIn);
         setCheckOut(data.checkOut);
         setMaxGuests(data.maxGuests);
+        setPrice(data.price);
       })
       .catch((error) => {
         console.error("Error fetching place details:", error);
@@ -60,6 +62,7 @@ const PlacesFormPage = () => {
       checkIn,
       checkOut,
       maxGuests,
+      price,
     };
 
     try {
@@ -135,7 +138,7 @@ const PlacesFormPage = () => {
 
         <div>
           <h2 className="text-2xl mt-4">Check-in & Check-out</h2>
-          <div className="grid sm:grid-cols-3 gap-2">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
             <div>
               <h3>Check-in time</h3>
               <input
@@ -159,6 +162,14 @@ const PlacesFormPage = () => {
               <input
                 value={maxGuests}
                 onChange={(ev) => setMaxGuests(ev.target.value)}
+                type="number"
+              />
+            </div>
+            <div>
+              <h3>Price per night</h3>
+              <input
+                value={price}
+                onChange={(ev) => setPrice(ev.target.value)}
                 type="number"
               />
             </div>

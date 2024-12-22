@@ -145,6 +145,7 @@ app.post("/api/places", (req, res) => {
     checkIn,
     checkOut,
     maxGuests,
+    price,
   } = req.body;
 
   if (!token) return res.status(401).json("Unauthorized");
@@ -155,6 +156,7 @@ app.post("/api/places", (req, res) => {
     try {
       const placeDoc = await Place.create({
         owner: userData.id,
+        price,
         title,
         address,
         addedPhotos,
@@ -214,6 +216,7 @@ app.put("/api/places/:id", async (req, res) => {
     checkIn,
     checkOut,
     maxGuests,
+    price,
   } = req.body;
 
   if (!token) {
@@ -250,6 +253,7 @@ app.put("/api/places/:id", async (req, res) => {
       checkIn,
       checkOut,
       maxGuests,
+      price,
     });
 
     // Save the updated place
