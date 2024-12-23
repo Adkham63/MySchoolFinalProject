@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import BookingWidget from "../BookingWidget";
 
 const PlacePage = () => {
   const { id } = useParams();
@@ -63,7 +64,7 @@ const PlacePage = () => {
   }
 
   return (
-    <div className="mt-4 bg-gray-100 -mx-8 px-8 py-8">
+    <div className="mt-4 bg-gray-100 -mx-8 px-8 pt-8">
       <h1 className="text-3xl">{place.title}</h1>
       <a
         className="flex gap-1 my-3 font-semibold underline"
@@ -92,13 +93,13 @@ const PlacePage = () => {
         </svg>
         {place.address}
       </a>
-
       <div className="relative">
         <div className="grid gap-2 grid-cols-[2fr_1fr] rounded-3xl overflow-hidden">
           <div>
             {place.addedPhotos?.[0] && (
               <div>
                 <img
+                  onClick={() => setShowAllPhotos(true)}
                   src={`http://localhost:4000${place.addedPhotos[0]}`}
                   alt={place.title || "Place image"}
                   className="aspect-square object-cover cursor-pointer"
@@ -109,6 +110,7 @@ const PlacePage = () => {
           <div className="grid">
             {place.addedPhotos?.[1] && (
               <img
+                onClick={() => setShowAllPhotos(true)}
                 src={`http://localhost:4000${place.addedPhotos[1]}`}
                 alt={place.title || "Place image"}
                 className="aspect-square object-cover cursor-pointer"
@@ -117,6 +119,7 @@ const PlacePage = () => {
             <div className="overflow-hidden">
               {place.addedPhotos?.[2] && (
                 <img
+                  onClick={() => setShowAllPhotos(true)}
                   src={`http://localhost:4000${place.addedPhotos[2]}`}
                   alt={place.title || "Place image"}
                   className="aspect-square object-cover relative top-2 cursor-pointer"
@@ -132,15 +135,26 @@ const PlacePage = () => {
           Show more photos
         </button>
       </div>
-      <div className="my-4">
-        <h2 className="font-semibold text-2xl">Description</h2>
-        {place.description}
-      </div>
-      <div className="grid grid-cols-2">
+      <div className="mt-8 mb-8 gap-8 grid grid-cols-1 md:grid-cols-[2fr_1fr]">
         <div>
+          <div className="my-4">
+            <h2 className="font-semibold text-2xl">Description</h2>
+            {place.description}
+          </div>
           Check-In: {place.checkIn} <br />
           Check-Out: {place.checkOut} <br />
           Max number of guests: {place.maxGuests}
+        </div>
+        <div>
+          <BookingWidget place={place} />
+        </div>
+      </div>
+      <div className="bg-white -mx-8 px-8 py-8 border-t">
+        <div>
+          <h2 className="font-semibold text-2xl">Extra Info</h2>
+        </div>
+        <div className="mb-4 mt-2 text-sm text-gray-700 leading-5">
+          {place.extraInfo}
         </div>
       </div>
     </div>

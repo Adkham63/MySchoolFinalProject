@@ -3,6 +3,7 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const User = require("./models/User.js");
 const Place = require("./models/Place.js");
+const Booking = require("./models/Booking.js");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const cookieParser = require("cookie-parser");
@@ -23,6 +24,15 @@ app.use(express.json());
 app.use(cookieParser()); //cookieParser
 app.use(cors({ credentials: true, origin: "http://localhost:5173" }));
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
+function getUserDataFromReq(req) {
+  return new Promise((resolve, reject) => {
+    jwt.verify(req.cookies.token, jwtSecret, {}, async (err, userData) => {
+      if (err) throw err;
+      resolve(userData);
+    });
+  });
+}
 
 console.log(process.env.MONGO_URL);
 
@@ -270,6 +280,57 @@ app.put("/api/places/:id", async (req, res) => {
 
 app.get("/api/places", async (req, res) => {
   res.json(await Place.find());
+});
+
+app.post("/api/booking", async (req, res) => {
+  const { token } = req.cookies;
+
+  if (!token) {
+    return res.status(401).json("Unauthorized: No token provided");
+  }
+
+  try {
+    const userData = await getUserDataFromReq(req);
+    const { place, checkIn, checkOut, numberOfGuests, name, phone, price } =
+      req.body;
+
+    // Create a new booking
+    const booking = await Booking.create({
+      place,
+      checkIn,
+      checkOut,
+      numberOfGuests,
+      name,
+      phone,
+      price,
+      user: userData.id,
+    });
+
+    // Respond with the newly created booking
+    res.status(201).json(booking);
+  } catch (err) {
+    console.error("Error creating booking:", err);
+    res
+      .status(500)
+      .json({ error: "Failed to create booking", details: err.message });
+  }
+});
+
+
+app.get("/api/bookings", async (req, res) => {
+  const userData = await getUserDataFromReq(req);
+
+  try {
+    const bookings = await Booking.find({ user: userData.id }).populate(
+      "place"
+    );
+    res.json(bookings);
+  } catch (err) {
+    console.error("Error fetching bookings:", err);
+    res
+      .status(500)
+      .json({ error: "Failed to fetch bookings", details: err.message });
+  }
 });
 
 // Start the server

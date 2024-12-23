@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import AccountNav from "../AccountNav";
 import axios from "axios";
+import PlaceImg from "../PlaceImg";
 
 const PlacesPage = () => {
   const { action } = useParams(); // Get 'action' param from the URL
@@ -53,15 +54,7 @@ const PlacesPage = () => {
                 key={place._id}
               >
                 <div className="h-32 w-32 flex-shrink-0">
-                  {place.addedPhotos &&
-                    Array.isArray(place.addedPhotos) &&
-                    place.addedPhotos.length > 0 && (
-                      <img
-                        src={`http://localhost:4000${place.addedPhotos[0]}`}
-                        alt={place.title}
-                        className="rounded-xl object-cover w-full h-full"
-                      />
-                    )}
+                  <PlaceImg place={place} />
                 </div>
                 <div className="flex-grow">
                   <h2 className="text-xl font-semibold truncate">
