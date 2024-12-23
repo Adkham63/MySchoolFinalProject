@@ -39,7 +39,8 @@ const BookingWidget = ({ place }) => {
         price: numberOfNights * place.price,
       });
       const bookingId = response.data._id;
-      setRedirect(`/account/booking/${bookingId}`);
+      setRedirect(`/account/bookings/${bookingId}`);
+
     } catch (error) {
       console.error("Error booking this place:", error.response?.data || error);
     }
