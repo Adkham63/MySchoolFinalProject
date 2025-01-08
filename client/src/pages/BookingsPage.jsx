@@ -53,7 +53,7 @@ const BookingsPage = () => {
                         />
                       </svg>
                       <span className="text-2xl">
-                        Total price: ${booking.price}
+                        Total price: UZS {booking.price}
                       </span>
                     </div>
                   </div>

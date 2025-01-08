@@ -40,7 +40,6 @@ const BookingWidget = ({ place }) => {
       });
       const bookingId = response.data._id;
       setRedirect(`/account/bookings/${bookingId}`);
-
     } catch (error) {
       console.error("Error booking this place:", error.response?.data || error);
     }
@@ -52,8 +51,8 @@ const BookingWidget = ({ place }) => {
 
   return (
     <div className="bg-white shadow p-4 rounded-2xl">
-      <div className="text-2xl text-center">
-        Price: ${place.price} / per night
+      <div className="text-xl text-center">
+        Price: UZS {place.price} / per lesson
       </div>
       <div className="border rounded-2xl mt-4">
         <div className="flex">
@@ -76,7 +75,7 @@ const BookingWidget = ({ place }) => {
         </div>
       </div>
       <div className="py-3 px-4 border-t">
-        <label>Number of guests:</label>
+        <label>Number of students:</label>
         <input
           type="number"
           value={numberOfGuests}
@@ -103,7 +102,7 @@ const BookingWidget = ({ place }) => {
       </div>
       <button onClick={bookThisPlace} className="primary mt-4">
         Book this place{" "}
-        {numberOfNights > 0 && <span>${numberOfNights * place.price}</span>}
+        {numberOfNights > 0 && <span> UZS {numberOfNights * place.price}</span>}
       </button>
     </div>
   );

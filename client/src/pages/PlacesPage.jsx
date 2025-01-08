@@ -40,7 +40,7 @@ const PlacesPage = () => {
                 clipRule="evenodd"
               />
             </svg>
-            Add New Place
+            Add New Teacher
           </Link>
         </div>
       )}

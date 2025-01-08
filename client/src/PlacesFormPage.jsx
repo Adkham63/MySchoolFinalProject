@@ -97,26 +97,41 @@ const PlacesFormPage = () => {
     <div>
       <AccountNav />
       <form onSubmit={savePlace}>
-        <h2 className="text-2xl mt-4">Title</h2>
+        <h2 className="text-2xl mt-4">Full name of the teacher:</h2>
         <input
           value={title}
           onChange={(ev) => setTitle(ev.target.value)}
           type="text"
-          placeholder="e.g. My lovely apartment"
+          placeholder="e.g. Rasulova Laylo"
         />
-        <h2 className="text-2xl mt-4">Address</h2>
+        <h2 className="text-2xl mt-4">A short description or quote:</h2>
         <input
           value={address}
           onChange={(ev) => setAddress(ev.target.value)}
           type="text"
-          placeholder="e.g. 123 Main St"
+          placeholder="Unlock the World of English: Book a Lesson with a Professional!"
+          className="border p-2 w-full"
         />
-        <h2 className="text-2xl mt-4">Photos</h2>
+
+        {/* Dynamic paragraph rendering */}
+        <div className="text-justify mt-4">
+          {address
+            .split("\n") // Split the input into paragraphs
+            .map(
+              (paragraph, index) =>
+                paragraph.trim() && ( // Render non-empty paragraphs
+                  <p key={index} className="mb-2">
+                    {paragraph}
+                  </p>
+                )
+            )}
+        </div>
+        <h2 className="text-2xl mt-4">Teacher's profile photo:</h2>
         <PhotosUploader addedPhotos={addedPhotos} onChange={setAddedPhotos} />
 
         {/* Replacing preInput function calls */}
         <div>
-          <h2 className="text-2xl mt-4">Description</h2>
+          <h2 className="text-2xl mt-4">Description:</h2>
           <textarea
             value={description}
             onChange={(ev) => setDescription(ev.target.value)}
@@ -124,7 +139,9 @@ const PlacesFormPage = () => {
         </div>
 
         <div>
-          <h2 className="text-2xl mt-4">Perks</h2>
+          <h2 className="text-2xl mt-4 mb-4">
+            Services provided to the group:
+          </h2>
           <Perks selected={perks} onChange={setPerks} />
         </div>
 
@@ -137,10 +154,10 @@ const PlacesFormPage = () => {
         </div>
 
         <div>
-          <h2 className="text-2xl mt-4">Check-in & Check-out</h2>
+          <h2 className="text-2xl mt-4 mb-4">Lesson Information:</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
             <div>
-              <h3>Check-in time</h3>
+              <h3>Lesson start time</h3>
               <input
                 value={checkIn}
                 onChange={(ev) => setCheckIn(ev.target.value)}
@@ -149,7 +166,7 @@ const PlacesFormPage = () => {
               />
             </div>
             <div>
-              <h3>Check-out time</h3>
+              <h3>Lesson end time</h3>
               <input
                 value={checkOut}
                 onChange={(ev) => setCheckOut(ev.target.value)}
@@ -158,7 +175,7 @@ const PlacesFormPage = () => {
               />
             </div>
             <div>
-              <h3>Max guests</h3>
+              <h3>Max students:</h3>
               <input
                 value={maxGuests}
                 onChange={(ev) => setMaxGuests(ev.target.value)}
@@ -166,7 +183,7 @@ const PlacesFormPage = () => {
               />
             </div>
             <div>
-              <h3>Price per night</h3>
+              <h3>Price per lesson:</h3>
               <input
                 value={price}
                 onChange={(ev) => setPrice(ev.target.value)}

@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function RegisterPage() {
   const [name, setName] = useState("");
@@ -34,17 +36,21 @@ export default function RegisterPage() {
         email,
         password,
       });
-      alert("Registration successful. Now you can log in.");
+      toast.success("Registration successful. Now you can log in."); // Success notification
     } catch (e) {
-      setError("Registration failed. Please try again later.");
+      toast.error("Registration failed. Please try again later."); // Error notification
     } finally {
       setLoading(false);
     }
   }
 
   return (
-    <div className="mt-4 grow flex items-center justify-around">
-      <div className="mb-64">
+    <div className="h-screen flex items-center justify-center">
+      {" "}
+      {/* Center content */}
+      <div className="mb-16">
+        {" "}
+        {/* Add bottom margin */}
         <h1 className="text-4xl text-center mb-4">Register</h1>
         <form className="max-w-md mx-auto" onSubmit={registerUser}>
           <input
@@ -82,6 +88,7 @@ export default function RegisterPage() {
           </div>
         </form>
       </div>
+      <ToastContainer /> {/* Add Toast notification container */}
     </div>
   );
 }

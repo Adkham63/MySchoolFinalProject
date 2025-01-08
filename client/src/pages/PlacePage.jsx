@@ -31,7 +31,18 @@ const PlacePage = () => {
         <div>
           <div className="my-4">
             <h2 className="font-semibold text-2xl">Description</h2>
-            {place.description}
+            <div className="text-justify">
+              {place.description
+                .split("\n") // Split the description into paragraphs
+                .map(
+                  (paragraph, index) =>
+                    paragraph.trim() && ( // Render only non-empty paragraphs
+                      <p key={index} className="mb-2">
+                        {paragraph}
+                      </p>
+                    )
+                )}
+            </div>
           </div>
           Check-In: {place.checkIn} <br />
           Check-Out: {place.checkOut} <br />
