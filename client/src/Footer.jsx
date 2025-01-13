@@ -1,6 +1,18 @@
-import React from "react";
+import React, { useContext } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { UserContext } from "./UserContext";
 
 const Footer = () => {
+  const { user } = useContext(UserContext) || {};
+  const location = useLocation();
+
+  // Navigation items
+  const menuItems = [
+    { name: "Home", path: "/" },
+    { name: "About Us", path: "/about" },
+    { name: "Contact Us", path: "/contact" },
+  ];
+
   return (
     <div className="md:mx-10">
       <div className="flex flex-col sm:grid grid-cols-[3fr_1fr_1fr] gap-8 my-10 mt-40 text-sm">
@@ -19,9 +31,20 @@ const Footer = () => {
         <div>
           <p className="text-xl font-medium mb-5">Company</p>
           <ul className="flex flex-col gap-2 text-gray-600">
-            <li>Home</li>
-            <li>About us</li>
-            <li>Contact us</li>
+            {menuItems.map((item, index) => (
+              <li key={index}>
+                <Link
+                  to={item.path}
+                  className={`hover:text-primary transition ${
+                    location.pathname === item.path
+                      ? "text-primary font-bold"
+                      : "text-gray-600"
+                  }`}
+                >
+                  {item.name}
+                </Link>
+              </li>
+            ))}
           </ul>
         </div>
 
@@ -38,7 +61,7 @@ const Footer = () => {
         {/*-----Copyright Text-----*/}
         <hr />
         <p className="py-5 text-sm text-center">
-          Copyright © 2025 My School LC - All Right Reserved.
+          Copyright © 2025 My School LC - All Rights Reserved.
         </p>
       </div>
     </div>

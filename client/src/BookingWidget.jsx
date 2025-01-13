@@ -57,7 +57,7 @@ const BookingWidget = ({ place }) => {
       <div className="border rounded-2xl mt-4">
         <div className="flex">
           <div className="py-3 px-4">
-            <label>Check In:</label>
+            <label>Start date:</label>
             <input
               type="date"
               value={checkIn}
@@ -65,7 +65,7 @@ const BookingWidget = ({ place }) => {
             />
           </div>
           <div className="py-3 px-4 border-l">
-            <label>Check Out:</label>
+            <label>End date:</label>
             <input
               type="date"
               value={checkOut}
@@ -101,7 +101,7 @@ const BookingWidget = ({ place }) => {
         )}
       </div>
       <button onClick={bookThisPlace} className="primary mt-4">
-        Book this place{" "}
+        Book trial lessons{" "}
         {numberOfNights > 0 && <span> UZS {numberOfNights * place.price}</span>}
       </button>
     </div>

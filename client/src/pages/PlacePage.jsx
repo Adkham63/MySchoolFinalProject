@@ -44,9 +44,31 @@ const PlacePage = () => {
                 )}
             </div>
           </div>
-          Check-In: {place.checkIn} <br />
-          Check-Out: {place.checkOut} <br />
-          Max number of guests: {place.maxGuests}
+
+          {/* Styled Check-In, Check-Out, and Max Guests Section */}
+          <div className="mt-6 p-4 bg-white rounded-lg shadow-md border border-gray-200">
+            <h2 className="font-semibold text-xl mb-2">Booking Information:</h2>
+            <div className="flex flex-col space-y-2">
+              <div className="flex justify-between">
+                <span className="font-medium text-gray-700">
+                  Lesson start time:
+                </span>
+                <span className="text-gray-900">{place.checkIn}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="font-medium text-gray-700">
+                  Lesson end time:
+                </span>
+                <span className="text-gray-900">{place.checkOut}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="font-medium text-gray-700">
+                  Maximum number of students in the classroom:
+                </span>
+                <span className="text-gray-900">{place.maxGuests}</span>
+              </div>
+            </div>
+          </div>
         </div>
         <div>
           <BookingWidget place={place} />

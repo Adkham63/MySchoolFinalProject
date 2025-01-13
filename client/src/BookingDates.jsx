@@ -3,14 +3,14 @@ import { differenceInCalendarDays, format } from "date-fns";
 
 const BookingDates = ({ booking, className }) => {
   return (
-    <div className={"flex gap-1 items-center" + className}>
+    <div className={"flex gap-0.5 items-center" + className}>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"
         strokeWidth={1.5}
         stroke="currentColor"
-        className="size-6"
+        className="size-6 mt-1"
       >
         <path
           strokeLinecap="round"
@@ -23,7 +23,7 @@ const BookingDates = ({ booking, className }) => {
         new Date(booking.checkOut),
         new Date(booking.checkIn)
       )}
-      <div className="flex items-center gap-1 ml-2">
+      <div className="flex items-center gap-0.5 ml-2">
         {" "}
         <svg
           xmlns="http://www.w3.org/2000/svg"
