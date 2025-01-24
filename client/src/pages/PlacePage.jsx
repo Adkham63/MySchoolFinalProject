@@ -3,7 +3,6 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import BookingWidget from "../BookingWidget";
 import PlaceGallery from "../PlaceGallery";
-import { pl } from "date-fns/locale";
 import AddressLink from "../AddressLink";
 
 const PlacePage = () => {
@@ -19,36 +18,37 @@ const PlacePage = () => {
   }, [id]);
 
   if (!place) {
-    return <p>Loading...</p>;
+    return <p className="text-center text-gray-500">Loading...</p>;
   }
 
   return (
     <div className="mt-4 bg-gray-100 -mx-8 px-8 pt-8">
-      <h1 className="text-3xl">{place.title}</h1>
+      <h1 className="text-4xl font-bold text-gray-800">{place.title}</h1>
       <AddressLink>{place.address}</AddressLink>
       <PlaceGallery place={place} />
       <div className="mt-8 mb-8 gap-8 grid grid-cols-1 md:grid-cols-[2fr_1fr]">
         <div>
           <div className="my-4">
-            <h2 className="font-semibold text-2xl">Description</h2>
-            <div className="text-justify">
-              {place.description
-                .split("\n") // Split the description into paragraphs
-                .map(
-                  (paragraph, index) =>
-                    paragraph.trim() && ( // Render only non-empty paragraphs
-                      <p key={index} className="mb-2">
-                        {paragraph}
-                      </p>
-                    )
-                )}
+            <h2 className="font-semibold text-2xl text-gray-800">
+              Description
+            </h2>
+            <div className="text-justify text-gray-700">
+              {place.description.split("\n").map(
+                (paragraph, index) =>
+                  paragraph.trim() && (
+                    <p key={index} className="mb-4">
+                      {paragraph}
+                    </p>
+                  )
+              )}
             </div>
           </div>
 
-          {/* Styled Check-In, Check-Out, and Max Guests Section */}
-          <div className="mt-6 p-4 bg-white rounded-lg shadow-md border border-gray-200">
-            <h2 className="font-semibold text-xl mb-2">Booking Information:</h2>
-            <div className="flex flex-col space-y-2">
+          <div className="mt-6 p-6 bg-white rounded-lg shadow-lg border border-gray-200">
+            <h2 className="font-semibold text-xl mb-4 text-gray-800">
+              Booking Information:
+            </h2>
+            <div className="flex flex-col space-y-4">
               <div className="flex justify-between">
                 <span className="font-medium text-gray-700">
                   Lesson start time:
@@ -76,9 +76,9 @@ const PlacePage = () => {
       </div>
       <div className="bg-white -mx-8 px-8 py-8 border-t">
         <div>
-          <h2 className="font-semibold text-2xl">Extra Info</h2>
+          <h2 className="font-semibold text-2xl text-gray-800">Extra Info</h2>
         </div>
-        <div className="mb-4 mt-2 text-sm text-gray-700 leading-5">
+        <div className="mb-4 mt-2 text-sm text-gray-700 leading-6">
           {place.extraInfo}
         </div>
       </div>

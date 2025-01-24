@@ -1,4 +1,5 @@
 import React from "react";
+import { FaCheckCircle } from "react-icons/fa";
 import myschool from "../assets/myschool.jpg";
 
 const AboutUsPage = () => {
@@ -52,23 +53,32 @@ const AboutUsPage = () => {
           WHY <span className="text-gray-800 font-semibold">CHOOSE US:</span>
         </p>
       </div>
-      <div className="flex flex-col md:flex-row mb-20">
-        <div className="border px-10 md:px-16 py-8 sm:py-16 flex flex-col gap-5 text-[15px] hover:bg-primary hover:text-white transition-all duration-300 text-gray-600 cursor-pointer">
-          <b>Efficiency:</b>
+      <div className="flex flex-col md:flex-row mb-20 gap-6 max-w-5xl">
+        <div className="border px-10 md:px-16 py-8 sm:py-16 flex flex-col gap-5 text-[15px] hover:bg-primary hover:text-white transition-all duration-300 text-gray-600 cursor-pointer rounded-lg shadow-md">
+          <div className="flex items-center">
+            <FaCheckCircle className="text-primary mr-2" />
+            <b>Efficiency:</b>
+          </div>
           <p>
             Streamlined registration and scheduling for trial lessons that adapt
             to your busy lifestyle.
           </p>
         </div>
-        <div className="border px-10 md:px-16 py-8 sm:py-16 flex flex-col gap-5 text-[15px] hover:bg-primary hover:text-white transition-all duration-300 text-gray-600 cursor-pointer">
-          <b>Convenience:</b>
+        <div className="border px-10 md:px-16 py-8 sm:py-16 flex flex-col gap-5 text-[15px] hover:bg-primary hover:text-white transition-all duration-300 text-gray-600 cursor-pointer rounded-lg shadow-md">
+          <div className="flex items-center">
+            <FaCheckCircle className="text-primary mr-2" />
+            <b>Convenience:</b>
+          </div>
           <p>
             Easy access to a network of experienced English teachers at all
             levels, from beginner to IELTS.
           </p>
         </div>
-        <div className="border px-10 md:px-16 py-8 sm:py-16 flex flex-col gap-5 text-[15px] hover:bg-primary hover:text-white transition-all duration-300 text-gray-600 cursor-pointer">
-          <b>Personalization:</b>
+        <div className="border px-10 md:px-16 py-8 sm:py-16 flex flex-col gap-5 text-[15px] hover:bg-primary hover:text-white transition-all duration-300 text-gray-600 cursor-pointer rounded-lg shadow-md">
+          <div className="flex items-center">
+            <FaCheckCircle className="text-primary mr-2" />
+            <b>Personalization:</b>
+          </div>
           <p>
             Tailored learning paths and guidance to help you achieve your
             English language goals efficiently.

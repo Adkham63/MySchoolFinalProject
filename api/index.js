@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const User = require("./models/User.js");
 const Place = require("./models/Place.js");
 const Booking = require("./models/Booking.js");
+const Comment = require("./models/Comments.js");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const cookieParser = require("cookie-parser");
@@ -330,6 +331,27 @@ app.get("/api/bookings", async (req, res) => {
     res
       .status(500)
       .json({ error: "Failed to fetch bookings", details: err.message });
+  }
+});
+
+// Fetch all comments
+app.get("/api/comments", async (req, res) => {
+  try {
+    const comments = await Comment.find();
+    res.json(comments);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch comments" });
+  }
+});
+
+// Add a new comment
+app.post("/api/comments", async (req, res) => {
+  const { text } = req.body;
+  try {
+    const newComment = await Comment.create({ text });
+    res.status(201).json(newComment);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to save comment" });
   }
 });
 
