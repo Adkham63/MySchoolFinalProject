@@ -10,7 +10,7 @@ const AboutUsPage = () => {
       </div>
       <div className="my-10 flex flex-col md:flex-row gap-12">
         <img
-          className="w-full h-auto md:max-w-[360px]"
+          className="object-cover w-full h-full rounded-lg m-auto md:w-1/2 lg:w-[500px]"
           src={myschool}
           alt="About Us Banner"
         />
