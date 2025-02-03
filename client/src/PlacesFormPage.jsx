@@ -20,7 +20,6 @@ const PlacesFormPage = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [redirect, setRedirect] = useState(false);
 
-  // Fetch place details when editing
   useEffect(() => {
     if (!id) return;
 
@@ -55,7 +54,7 @@ const PlacesFormPage = () => {
     const placeData = {
       title,
       address,
-      addedPhotos: [...new Set(addedPhotos)], // Ensure no duplicates before saving
+      addedPhotos: [...new Set(addedPhotos)],
       description,
       perks,
       extraInfo,
@@ -67,10 +66,8 @@ const PlacesFormPage = () => {
 
     try {
       if (id) {
-        // Update existing place
         await axios.put(`/api/places/${id}`, placeData);
       } else {
-        // Create a new place
         await axios.post("/api/places", placeData);
       }
       setRedirect(true);
@@ -79,19 +76,24 @@ const PlacesFormPage = () => {
     }
   };
 
+  const deletePlace = async () => {
+    if (
+      window.confirm("Are you sure you want to delete this teacher's profile?")
+    ) {
+      try {
+        // Delete place and related bookings
+        await axios.delete(`/api/places/${id}`);
+        setRedirect(true);
+      } catch (error) {
+        console.error("Error deleting place:", error);
+        alert("Failed to delete the teacher's profile. Please try again.");
+      }
+    }
+  };
+
   if (redirect) {
     return <Navigate to="/account/places" />;
   }
-
-  // Helper function to generate form fields
-  const preInput = (label, placeholder) => {
-    return (
-      <div>
-        <h2 className="text-2xl mt-4">{label}</h2>
-        <input type="text" placeholder={placeholder} />
-      </div>
-    );
-  };
 
   return (
     <div>
@@ -113,23 +115,20 @@ const PlacesFormPage = () => {
           className="border p-2 w-full"
         />
 
-        {/* Dynamic paragraph rendering */}
         <div className="text-justify mt-4">
-          {address
-            .split("\n") // Split the input into paragraphs
-            .map(
-              (paragraph, index) =>
-                paragraph.trim() && ( // Render non-empty paragraphs
-                  <p key={index} className="mb-2">
-                    {paragraph}
-                  </p>
-                )
-            )}
+          {address.split("\n").map(
+            (paragraph, index) =>
+              paragraph.trim() && (
+                <p key={index} className="mb-2">
+                  {paragraph}
+                </p>
+              )
+          )}
         </div>
+
         <h2 className="text-2xl mt-4">Teacher's profile photo:</h2>
         <PhotosUploader addedPhotos={addedPhotos} onChange={setAddedPhotos} />
 
-        {/* Replacing preInput function calls */}
         <div>
           <h2 className="text-2xl mt-4">Description:</h2>
           <textarea
@@ -193,10 +192,23 @@ const PlacesFormPage = () => {
           </div>
         </div>
 
-        <div>
-          <button className="primary my-4" disabled={isSubmitting}>
+        <div className="flex justify-between mt-4">
+          <button
+            className="bg-blue-600 text-white py-2 px-6 rounded-lg font-semibold text-lg hover:bg-blue-700 transition duration-300 disabled:bg-blue-300"
+            disabled={isSubmitting}
+          >
             {isSubmitting ? "Saving..." : "Save"}
           </button>
+
+          {id && (
+            <button
+              type="button"
+              onClick={deletePlace}
+              className="bg-red-600 text-white py-2 px-6 rounded-lg font-semibold text-lg hover:bg-red-700 transition duration-300"
+            >
+              Delete Teacher Profile
+            </button>
+          )}
         </div>
       </form>
     </div>

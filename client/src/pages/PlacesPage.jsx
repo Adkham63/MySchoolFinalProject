@@ -44,8 +44,13 @@ const PlacesPage = () => {
           </Link>
         </div>
       )}
+
       <div className="mt-4">
-        {places.length > 0 &&
+        {places.length === 0 ? (
+          <p className="text-xl text-center text-gray-600">
+            There are no teacher profiles at the moment.
+          </p>
+        ) : (
           places.map((place) => {
             return (
               <Link
@@ -73,7 +78,8 @@ const PlacesPage = () => {
                 </div>
               </Link>
             );
-          })}
+          })
+        )}
       </div>
     </>
   );

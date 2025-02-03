@@ -4,6 +4,7 @@ import axios from "axios";
 import BookingWidget from "../BookingWidget";
 import PlaceGallery from "../PlaceGallery";
 import AddressLink from "../AddressLink";
+import { FaCheckCircle } from "react-icons/fa"; // Import check icon for perks
 
 const PlacePage = () => {
   const { id } = useParams();
@@ -11,7 +12,6 @@ const PlacePage = () => {
 
   useEffect(() => {
     if (!id) return;
-
     axios.get(`/api/places/${id}`).then((response) => {
       setPlace(response.data);
     });
@@ -26,6 +26,8 @@ const PlacePage = () => {
       <h1 className="text-4xl font-bold text-gray-800">{place.title}</h1>
       <AddressLink>{place.address}</AddressLink>
       <PlaceGallery place={place} />
+
+      {/* Main Content */}
       <div className="mt-8 mb-8 gap-8 grid grid-cols-1 md:grid-cols-[2fr_1fr]">
         <div>
           <div className="my-4">
@@ -44,6 +46,7 @@ const PlacePage = () => {
             </div>
           </div>
 
+          {/* Booking Information */}
           <div className="mt-6 p-6 bg-white rounded-lg shadow-lg border border-gray-200">
             <h2 className="font-semibold text-xl mb-4 text-gray-800">
               Booking Information:
@@ -63,23 +66,49 @@ const PlacePage = () => {
               </div>
               <div className="flex justify-between">
                 <span className="font-medium text-gray-700">
-                  Maximum number of students in the classroom:
+                  Maximum students:
                 </span>
                 <span className="text-gray-900">{place.maxGuests}</span>
               </div>
             </div>
           </div>
         </div>
+
+        {/* Booking Widget */}
         <div>
           <BookingWidget place={place} />
         </div>
       </div>
-      <div className="bg-white -mx-8 px-8 py-8 border-t">
+
+      {/* Extra Info and Perks Section */}
+      <div className="bg-white -mx-8 px-8 py-8 border-t rounded-lg shadow-md">
         <div>
           <h2 className="font-semibold text-2xl text-gray-800">Extra Info</h2>
+          <p className="mb-4 mt-2 text-sm text-gray-700 leading-6">
+            {place.extraInfo}
+          </p>
         </div>
-        <div className="mb-4 mt-2 text-sm text-gray-700 leading-6">
-          {place.extraInfo}
+
+        {/* Perks */}
+        <div>
+          <h2 className="font-semibold text-2xl text-gray-800 mt-6">
+            The amenities provided by the educational centre:
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+            {place.perks && place.perks.length > 0 ? (
+              place.perks.map((perk, index) => (
+                <div
+                  key={index}
+                  className="flex items-center gap-3 p-4 bg-gray-50 border border-gray-200 rounded-lg shadow-sm hover:bg-primary hover:text-white transition-all duration-300"
+                >
+                  <FaCheckCircle className="text-primary text-xl" />
+                  <span className="font-medium">{perk}</span>
+                </div>
+              ))
+            ) : (
+              <p>No perks available.</p>
+            )}
+          </div>
         </div>
       </div>
     </div>

@@ -10,12 +10,16 @@ const ProfilePage = () => {
   const { subpage } = useParams();
   const [redirect, setRedirect] = useState(null);
 
-  // Return loading state if data is not ready
+  // Show loading state if data isn't ready
   if (!ready) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex justify-center items-center h-screen bg-gray-100 text-lg text-gray-600">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-primary"></div>
+      </div>
+    );
   }
 
-  // Redirect to login if the user is not authenticated
+  // Redirect to login if user isn't authenticated
   if (!user && ready && !redirect) {
     return <Navigate to="/login" />;
   }
@@ -25,7 +29,7 @@ const ProfilePage = () => {
     try {
       await axios.post("/logout");
       setUser(null);
-      setRedirect("/"); // Redirect to the homepage after logging out
+      setRedirect("/"); // Redirect to homepage after logout
     } catch (error) {
       console.error("Logout failed:", error);
       alert("An error occurred during logout. Please try again.");
@@ -37,28 +41,41 @@ const ProfilePage = () => {
   }
 
   return (
-    <div>
+    <div className="p-6 bg-gradient-to-b from-gray-50 to-gray-200 min-h-screen">
       <AccountNav />
-      {/* Conditional rendering based on subpage */}
+
+      {/* Profile Section */}
       {subpage === "profile" && (
-        <div className="text-center max-w-lg mx-auto">
-          <h2>
-            Logged in as {user.name} ({user.email})
+        <div className="max-w-lg mx-auto mt-12 bg-white shadow-xl rounded-2xl p-8 text-center transition-transform transform hover:-translate-y-1 hover:shadow-2xl">
+          <h2 className="text-3xl font-extrabold text-gray-800 mb-4">
+            Welcome, <span className="text-primary">{user.name}</span>!
           </h2>
-          <button onClick={logout} className="primary max-w-sm mt-2">
+          <p className="text-gray-500 italic mb-6">{user.email}</p>
+          <button
+            onClick={logout}
+            className="bg-red-500 text-white py-3 px-8 rounded-full hover:bg-red-600 transition duration-300 shadow-md hover:shadow-lg"
+          >
             Log out
           </button>
         </div>
       )}
 
+      {/* Bookings Section */}
       {subpage === "bookings" && (
-        <div>
-          <p>Bookings section content...</p>
+        <div className="max-w-4xl mx-auto mt-12 bg-white shadow-lg rounded-2xl p-8">
+          <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+            Your Bookings
+          </h2>
+          <p className="text-gray-600">
+            You have no bookings yet. Start exploring and book your first
+            lesson!
+          </p>
         </div>
       )}
 
+      {/* Places Section */}
       {subpage === "places" && (
-        <div>
+        <div className="max-w-4xl mx-auto mt-12 bg-white shadow-lg rounded-2xl p-8">
           <PlacesPage />
         </div>
       )}

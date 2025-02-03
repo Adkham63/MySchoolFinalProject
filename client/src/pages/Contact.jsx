@@ -47,7 +47,7 @@ const Contact = () => {
               className="flex items-center gap-3 bg-green-50 hover:bg-green-100 text-green-700 font-medium py-2 px-4 rounded-lg shadow-sm transition-all"
             >
               <FaPhoneAlt className="text-lg" />
-              +998 99 517-64-00
+              +998 (99) 517-64-00
             </a>
           </div>
           <div className="flex flex-col gap-4 text-gray-600">
@@ -59,7 +59,7 @@ const Contact = () => {
               className="flex items-center gap-3 bg-blue-50 hover:bg-blue-100 text-primary font-medium py-2 px-4 rounded-lg shadow-sm transition-all"
             >
               <FaTelegramPlane className="text-lg" />
-              @myschooluz
+              myschooluz
             </a>
             <a
               href="https://t.me/myschool_exam_department"
@@ -68,7 +68,7 @@ const Contact = () => {
               className="flex items-center gap-3 bg-blue-50 hover:bg-blue-100 text-primary font-medium py-2 px-4 rounded-lg shadow-sm transition-all"
             >
               <FaTelegramPlane className="text-lg" />
-              @myschool_exam_department
+              myschool_exam_department
             </a>
           </div>
           <p className="font-semibold text-xl text-gray-700">Join Our Team</p>

@@ -317,7 +317,6 @@ app.post("/api/booking", async (req, res) => {
   }
 });
 
-
 app.get("/api/bookings", async (req, res) => {
   const userData = await getUserDataFromReq(req);
 
@@ -352,6 +351,42 @@ app.post("/api/comments", async (req, res) => {
     res.status(201).json(newComment);
   } catch (error) {
     res.status(500).json({ error: "Failed to save comment" });
+  }
+});
+
+// Delete a booking by ID
+app.delete("/api/bookings/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const deletedBooking = await Booking.findByIdAndDelete(id);
+
+    if (!deletedBooking) {
+      return res.status(404).json({ message: "Booking not found" });
+    }
+
+    res.status(200).json({ message: "Booking successfully canceled" });
+  } catch (error) {
+    console.error("Error canceling booking:", error);
+    res.status(500).json({ message: "Failed to cancel booking" });
+  }
+});
+
+// Delete a place (teacher profile) and related bookings
+app.delete("/api/places/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    // Delete related bookings
+    await Booking.deleteMany({ place: id });
+
+    // Delete the teacher profile (place)
+    await Place.findByIdAndDelete(id);
+
+    res.status(200).send("Place and related bookings deleted successfully");
+  } catch (error) {
+    console.error("Error deleting place and bookings:", error);
+    res.status(500).send("Server error");
   }
 });
 

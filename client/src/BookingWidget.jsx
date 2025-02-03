@@ -1,12 +1,14 @@
 import React, { useContext, useEffect, useState } from "react";
 import { differenceInCalendarDays } from "date-fns";
-import { Navigate } from "react-router-dom"; // Import Navigate
+import { Navigate } from "react-router-dom";
 import axios from "axios";
 import { UserContext } from "./UserContext.jsx";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const BookingWidget = ({ place }) => {
-  const [checkIn, setCheckIn] = useState("");
-  const [checkOut, setCheckOut] = useState("");
+  const [checkIn, setCheckIn] = useState(null);
+  const [checkOut, setCheckOut] = useState(null);
   const [numberOfGuests, setNumberOfGuests] = useState(1);
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -21,10 +23,7 @@ const BookingWidget = ({ place }) => {
 
   let numberOfNights = 0;
   if (checkIn && checkOut) {
-    numberOfNights = differenceInCalendarDays(
-      new Date(checkOut),
-      new Date(checkIn)
-    );
+    numberOfNights = differenceInCalendarDays(checkOut, checkIn);
   }
 
   async function bookThisPlace() {
@@ -50,58 +49,86 @@ const BookingWidget = ({ place }) => {
   }
 
   return (
-    <div className="bg-white shadow p-4 rounded-2xl">
-      <div className="text-xl text-center">
+    <div className="bg-white shadow-xl rounded-2xl p-6 max-w-2xl mx-auto">
+      <div className="text-center text-xl text-gray-800 font-semibold mb-4">
         Price: UZS {place.price} / per lesson
       </div>
-      <div className="border rounded-2xl mt-4">
-        <div className="flex">
-          <div className="py-3 px-4">
-            <label>Start date:</label>
-            <input
-              type="date"
-              value={checkIn}
-              onChange={(ev) => setCheckIn(ev.target.value)}
+
+      <div className="border border-gray-200 rounded-xl p-4 mb-4">
+        <div className="flex flex-col sm:flex-row gap-4">
+          <div className="w-full">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Start Date:
+            </label>
+            <DatePicker
+              selected={checkIn}
+              onChange={(date) => setCheckIn(date)}
+              selectsStart
+              startDate={checkIn}
+              endDate={checkOut}
+              placeholderText="Select start date"
+              className="w-full border text-xs rounded p-2 focus:outline-none focus:ring-2 focus:ring-primary"
             />
           </div>
-          <div className="py-3 px-4 border-l">
-            <label>End date:</label>
-            <input
-              type="date"
-              value={checkOut}
-              onChange={(ev) => setCheckOut(ev.target.value)}
+          <div className="w-full">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              End Date:
+            </label>
+            <DatePicker
+              selected={checkOut}
+              onChange={(date) => setCheckOut(date)}
+              selectsEnd
+              startDate={checkIn}
+              endDate={checkOut}
+              minDate={checkIn}
+              placeholderText="Select end date"
+              className="w-full text-xs border rounded p-2 focus:outline-none focus:ring-2 focus:ring-primary"
             />
           </div>
         </div>
       </div>
-      <div className="py-3 px-4 border-t">
-        <label>Number of students:</label>
+
+      <div className="border-t border-gray-200 pt-4">
+        <label className="block text-sm font-medium text-gray-700 mb-2">
+          Number of Students:
+        </label>
         <input
           type="number"
           value={numberOfGuests}
           onChange={(ev) => setNumberOfGuests(ev.target.value)}
+          className="w-full border rounded p-2 focus:outline-none focus:ring-2 focus:ring-primary mb-4"
         />
         {numberOfNights > 0 && (
-          <div className="py-3 px-4 border-t">
-            <label>Your full name:</label>
+          <div className="border-t border-gray-200 pt-4">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Your Full Name:
+            </label>
             <input
               type="text"
               placeholder="John Doe"
               value={name}
               onChange={(ev) => setName(ev.target.value)}
+              className="w-full border rounded p-2 focus:outline-none focus:ring-2 focus:ring-primary mb-4"
             />
-            <label>Your phone number:</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Your Phone Number:
+            </label>
             <input
               type="tel"
               placeholder="+998901112233"
               value={phone}
               onChange={(ev) => setPhone(ev.target.value)}
+              className="w-full border rounded p-2 focus:outline-none focus:ring-2 focus:ring-primary"
             />
           </div>
         )}
       </div>
-      <button onClick={bookThisPlace} className="primary mt-4">
-        Book trial lessons{" "}
+
+      <button
+        onClick={bookThisPlace}
+        className="mt-6 w-full bg-primary text-white py-3 px-4 rounded-full hover:bg-primary-dark transition-all duration-300 font-semibold"
+      >
+        Book Trial Lessons
         {numberOfNights > 0 && <span> UZS {numberOfNights * place.price}</span>}
       </button>
     </div>
