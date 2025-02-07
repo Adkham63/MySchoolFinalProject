@@ -13,8 +13,8 @@ const ProfilePage = () => {
   // Show loading state if data isn't ready
   if (!ready) {
     return (
-      <div className="flex justify-center items-center h-screen bg-gray-100 text-lg text-gray-600">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-primary"></div>
+      <div className="flex justify-center items-center h-screen bg-gradient-to-b from-gray-100 to-gray-300 text-lg text-gray-600">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-primary"></div>
       </div>
     );
   }
@@ -41,13 +41,13 @@ const ProfilePage = () => {
   }
 
   return (
-    <div className="p-6 bg-gradient-to-b from-gray-50 to-gray-200 min-h-screen">
+    <div className="p-8 bg-gradient-to-b from-gray-50 to-gray-200 min-h-screen">
       <AccountNav />
 
       {/* Profile Section */}
       {subpage === "profile" && (
-        <div className="max-w-lg mx-auto mt-12 bg-white shadow-xl rounded-2xl p-8 text-center transition-transform transform hover:-translate-y-1 hover:shadow-2xl">
-          <h2 className="text-3xl font-extrabold text-gray-800 mb-4">
+        <div className="max-w-lg mx-auto mt-12 bg-white shadow-xl rounded-2xl p-8 text-center transition-transform transform hover:scale-105 hover:shadow-2xl">
+          <h2 className="text-4xl font-extrabold text-gray-800 mb-4">
             Welcome, <span className="text-primary">{user.name}</span>!
           </h2>
           <p className="text-gray-500 italic mb-6">{user.email}</p>
@@ -63,10 +63,10 @@ const ProfilePage = () => {
       {/* Bookings Section */}
       {subpage === "bookings" && (
         <div className="max-w-4xl mx-auto mt-12 bg-white shadow-lg rounded-2xl p-8">
-          <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+          <h2 className="text-3xl font-semibold text-gray-800 mb-4">
             Your Bookings
           </h2>
-          <p className="text-gray-600">
+          <p className="text-gray-600 text-lg">
             You have no bookings yet. Start exploring and book your first
             lesson!
           </p>

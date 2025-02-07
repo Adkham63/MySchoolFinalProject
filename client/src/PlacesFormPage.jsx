@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Navigate, useParams } from "react-router-dom";
 import axios from "axios";
+import Swal from "sweetalert2";
 import Perks from "./Perks.jsx";
 import PhotosUploader from "./PhotosUploader";
 import AccountNav from "./AccountNav.jsx";
@@ -77,18 +78,35 @@ const PlacesFormPage = () => {
   };
 
   const deletePlace = async () => {
-    if (
-      window.confirm("Are you sure you want to delete this teacher's profile?")
-    ) {
-      try {
-        // Delete place and related bookings
-        await axios.delete(`/api/places/${id}`);
-        setRedirect(true);
-      } catch (error) {
-        console.error("Error deleting place:", error);
-        alert("Failed to delete the teacher's profile. Please try again.");
+    Swal.fire({
+      title: "Are you sure?",
+      text: "This will permanently delete the teacher's profile and related bookings.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "Cancel",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await axios.delete(`/api/places/${id}`);
+          Swal.fire(
+            "Deleted!",
+            "The teacher's profile has been deleted.",
+            "success"
+          );
+          setRedirect(true);
+        } catch (error) {
+          console.error("Error deleting place:", error);
+          Swal.fire(
+            "Error!",
+            "Failed to delete the teacher's profile.",
+            "error"
+          );
+        }
       }
-    }
+    });
   };
 
   if (redirect) {
