@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Image from "./Image.jsx";
 
 const PlaceGallery = ({ place }) => {
   const [showAllPhotos, setShowAllPhotos] = useState(false);
@@ -30,9 +31,9 @@ const PlaceGallery = ({ place }) => {
           {place?.addedPhotos?.length > 0 ? (
             place.addedPhotos.map((photo, index) => (
               <div key={index}>
-                <img
-                  src={`http://localhost:4000${photo}`} // Correct URL for the images
-                  alt={`Photo ${index + 1}`}
+                <Image
+                  src={photo}
+                  alt={place.title || "Place image"}
                   className="w-full h-auto"
                 />
               </div>
@@ -50,9 +51,9 @@ const PlaceGallery = ({ place }) => {
         <div>
           {place.addedPhotos?.[0] && (
             <div>
-              <img
+              <Image
                 onClick={() => setShowAllPhotos(true)}
-                src={`http://localhost:4000${place.addedPhotos[0]}`}
+                src={place.addedPhotos[0]}
                 alt={place.title || "Place image"}
                 className="aspect-square object-cover cursor-pointer"
               />
@@ -61,18 +62,18 @@ const PlaceGallery = ({ place }) => {
         </div>
         <div className="grid">
           {place.addedPhotos?.[1] && (
-            <img
+            <Image
               onClick={() => setShowAllPhotos(true)}
-              src={`http://localhost:4000${place.addedPhotos[1]}`}
+              src={place.addedPhotos[1]}
               alt={place.title || "Place image"}
               className="aspect-square object-cover cursor-pointer"
             />
           )}
           <div className="overflow-hidden">
             {place.addedPhotos?.[2] && (
-              <img
+              <Image
                 onClick={() => setShowAllPhotos(true)}
-                src={`http://localhost:4000${place.addedPhotos[2]}`}
+                src={place.addedPhotos[2]}
                 alt={place.title || "Place image"}
                 className="aspect-square object-cover relative top-2 cursor-pointer"
               />

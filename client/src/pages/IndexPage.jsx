@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import CommentSection from "../CommentSection"; // Ensure the path is correct
+import Image from "../Image.jsx";
 
 const IndexPage = () => {
   const [places, setPlaces] = useState([]);
@@ -21,9 +22,9 @@ const IndexPage = () => {
             <Link to={"/place/" + place._id} key={place._id}>
               <div className="bg-gray-500 rounded-2xl flex mb-2">
                 {place.addedPhotos?.[0] && (
-                  <img
+                  <Image
                     className="rounded-2xl object-cover aspect-square"
-                    src={`http://localhost:4000${place.addedPhotos[0]}`}
+                    src={place.addedPhotos[0]}
                     alt={place.title}
                   />
                 )}

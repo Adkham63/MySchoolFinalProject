@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import Image from "./Image.jsx";
 
 const PhotosUploader = ({ addedPhotos, onChange }) => {
   const [photoLink, setPhotoLink] = useState("");
@@ -52,14 +53,14 @@ const PhotosUploader = ({ addedPhotos, onChange }) => {
       .finally(() => setIsUploading(false)); // End loading
   }
 
- function removePhoto(ev, filename) {
-   ev.preventDefault();
-   onChange([...addedPhotos.filter((photo) => photo !== filename)]);
- }
- function selectAsMainPhoto(ev, filename) {
-   ev.preventDefault();
-   onChange([filename, ...addedPhotos.filter((photo) => photo !== filename)]);
- }
+  function removePhoto(ev, filename) {
+    ev.preventDefault();
+    onChange([...addedPhotos.filter((photo) => photo !== filename)]);
+  }
+  function selectAsMainPhoto(ev, filename) {
+    ev.preventDefault();
+    onChange([filename, ...addedPhotos.filter((photo) => photo !== filename)]);
+  }
 
   return (
     <>
@@ -87,11 +88,12 @@ const PhotosUploader = ({ addedPhotos, onChange }) => {
         {addedPhotos.length > 0 &&
           addedPhotos.map((link, index) => (
             <div className="h-32 flex relative" key={index}>
-              <img
-                src={`http://localhost:4000${link}`} // Assuming the server serves images from this path
+              <Image
+                src={link}
                 alt={`Uploaded ${index}`}
                 className="rounded-2xl w-full object-cover"
               />
+
               <button
                 onClick={(ev) => removePhoto(ev, link)}
                 className="absolute bottom-1 right-2 text-white bg-black bg-opacity-50 rounded-2xl py-2 px-3 cursor-pointer"

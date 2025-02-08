@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "./Image.jsx";
 
 const PlaceImg = ({
   place,
@@ -10,9 +11,9 @@ const PlaceImg = ({
   }
 
   // Return the image based on the provided index
-  const photoUrl = `http://localhost:4000${place.addedPhotos[index]}`;
+  const photoUrl = place.addedPhotos[index];
 
-  return <img src={photoUrl} alt={place.title} className={className} />;
+  return <Image src={photoUrl} alt={place.title} className={className} />;
 };
 
 export default PlaceImg;

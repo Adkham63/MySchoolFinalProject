@@ -89,7 +89,7 @@ const BookingsPage = () => {
                 to={`/account/bookings/${booking._id}`}
                 className="flex gap-4"
               >
-                <div className="w-48">
+                <div className="h-32 w-32 flex-shrink-0">
                   <PlaceImg place={booking.place} />
                 </div>
                 <div className="py-3 pr-3 grow">

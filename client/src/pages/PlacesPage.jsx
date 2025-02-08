@@ -4,6 +4,7 @@ import AccountNav from "../AccountNav";
 import axios from "axios";
 import PlaceImg from "../PlaceImg";
 
+
 const PlacesPage = () => {
   const { action } = useParams(); // Get 'action' param from the URL
   const [places, setPlaces] = useState([]);
