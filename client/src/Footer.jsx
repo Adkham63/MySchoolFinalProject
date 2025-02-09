@@ -14,57 +14,76 @@ const Footer = () => {
   ];
 
   return (
-    <div className="md:mx-10">
-      <div className="flex flex-col sm:grid grid-cols-[3fr_1fr_1fr] gap-8 my-10 mt-40 text-sm">
-        {/*-----Left Section-----*/}
-        <div>
-          <p className="w-full md:w-2/3 text-gray-600 leading-6 text-justify">
-            Welcome to My School Learning Centre, where we empower students to
-            achieve their goals in English language education. Our team of
-            expert teachers is dedicated to creating an engaging and supportive
-            learning environment for all levels, from beginners to IELTS
-            preparation.
+    <footer className="bg-white py-12 mt-40">
+      <div className="max-w-screen-xl mx-auto px-8 md:px-10 text-sm">
+        <div className="flex flex-col sm:grid grid-cols-[3fr_1fr_1fr] gap-8">
+          {/* Left Section */}
+          <div>
+            <p className="text-gray-600 leading-7 text-justify mb-6">
+              Welcome to My School Learning Centre, where we empower students to
+              achieve their goals in English language education. Our team of
+              expert teachers is dedicated to creating an engaging and
+              supportive learning environment for all levels, from beginners to
+              IELTS preparation.
+            </p>
+          </div>
+
+          {/* Center Section */}
+          <div>
+            <p className="text-xl font-medium mb-5">Company</p>
+            <ul className="flex flex-col gap-3 text-gray-600">
+              {menuItems.map((item, index) => (
+                <li key={index}>
+                  <Link
+                    to={item.path}
+                    className={`transition duration-300 ease-in-out ${
+                      location.pathname === item.path
+                        ? "text-primary font-semibold"
+                        : "text-gray-600 hover:text-primary"
+                    }`}
+                  >
+                    {item.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Right Section */}
+          <div>
+            <p className="text-xl font-medium mb-5">Get in touch</p>
+            <ul className="flex flex-col gap-3 text-gray-600">
+              <li>
+                <a
+                  href="tel:+998995176400"
+                  className="hover:text-primary transition duration-300 ease-in-out"
+                >
+                  +998 (99) 517-64-00
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://t.me/myschooluz"
+                  className="hover:text-primary transition duration-300 ease-in-out"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  @myschooluz
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        {/* Copyright Section */}
+        <div className="mt-12">
+          <hr className="border-gray-200 mb-5" />
+          <p className="text-center text-gray-600 text-sm">
+            Copyright © 2025 My School LC - All Rights Reserved.
           </p>
         </div>
-
-        {/*-----Center Section-----*/}
-        <div>
-          <p className="text-xl font-medium mb-5">Company</p>
-          <ul className="flex flex-col gap-2 text-gray-600">
-            {menuItems.map((item, index) => (
-              <li key={index}>
-                <Link
-                  to={item.path}
-                  className={`hover:text-primary transition ${
-                    location.pathname === item.path
-                      ? "text-primary font-bold"
-                      : "text-gray-600"
-                  }`}
-                >
-                  {item.name}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/*-----Right Section-----*/}
-        <div>
-          <p className="text-xl font-medium mb-5">Get in touch</p>
-          <ul className="flex flex-col gap-2 text-gray-600">
-            <li>+998 (99) 517-64-00</li>
-            <li>@myschooluz</li>
-          </ul>
-        </div>
       </div>
-      <div>
-        {/*-----Copyright Text-----*/}
-        <hr />
-        <p className="py-5 text-sm text-center">
-          Copyright © 2025 My School LC - All Rights Reserved.
-        </p>
-      </div>
-    </div>
+    </footer>
   );
 };
 

@@ -13,7 +13,7 @@ const ProfilePage = () => {
   // Show loading state if data isn't ready
   if (!ready) {
     return (
-      <div className="flex justify-center items-center h-screen bg-gradient-to-b from-gray-100 to-gray-300 text-lg text-gray-600">
+      <div className="flex justify-center items-center h-screen bg-gradient-to-b from-gray-50 to-gray-200">
         <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-primary"></div>
       </div>
     );
@@ -41,19 +41,19 @@ const ProfilePage = () => {
   }
 
   return (
-    <div className="p-8 bg-gradient-to-b from-gray-50 to-gray-200 min-h-screen">
+    <div className="p-10 bg-gradient-to-b from-gray-50 to-gray-200 min-h-screen">
       <AccountNav />
 
       {/* Profile Section */}
       {subpage === "profile" && (
-        <div className="max-w-lg mx-auto mt-12 bg-white shadow-xl rounded-2xl p-8 text-center transition-transform transform hover:scale-105 hover:shadow-2xl">
-          <h2 className="text-4xl font-extrabold text-gray-800 mb-4">
+        <div className="max-w-lg mx-auto mt-12 bg-white shadow-xl rounded-3xl p-10 text-center transform hover:scale-105 transition duration-300">
+          <h2 className="text-4xl font-semibold text-gray-800 mb-6">
             Welcome, <span className="text-primary">{user.name}</span>!
           </h2>
-          <p className="text-gray-500 italic mb-6">{user.email}</p>
+          <p className="text-gray-600 mb-6">{user.email}</p>
           <button
             onClick={logout}
-            className="bg-red-500 text-white py-3 px-8 rounded-full hover:bg-red-600 transition duration-300 shadow-md hover:shadow-lg"
+            className="bg-red-600 text-white py-3 px-10 rounded-full hover:bg-red-700 transition-all duration-300 shadow-lg hover:shadow-xl"
           >
             Log out
           </button>
@@ -62,7 +62,7 @@ const ProfilePage = () => {
 
       {/* Bookings Section */}
       {subpage === "bookings" && (
-        <div className="max-w-4xl mx-auto mt-12 bg-white shadow-lg rounded-2xl p-8">
+        <div className="max-w-4xl mx-auto mt-12 bg-white shadow-lg rounded-3xl p-10">
           <h2 className="text-3xl font-semibold text-gray-800 mb-4">
             Your Bookings
           </h2>
@@ -75,7 +75,7 @@ const ProfilePage = () => {
 
       {/* Places Section */}
       {subpage === "places" && (
-        <div className="max-w-4xl mx-auto mt-12 bg-white shadow-lg rounded-2xl p-8">
+        <div className="max-w-4xl mx-auto mt-12 bg-white shadow-lg rounded-3xl p-10">
           <PlacesPage />
         </div>
       )}

@@ -456,6 +456,23 @@ app.delete("/api/places/:id", async (req, res) => {
   }
 });
 
+// Add this route to handle likes
+app.post("/api/comments/:id/like", async (req, res) => {
+  mongoose.connect(process.env.MONGO_URL); // Ensure connection
+  try {
+    const comment = await Comment.findById(req.params.id);
+    if (!comment) {
+      return res.status(404).json({ error: "Comment not found" });
+    }
+    comment.likes = (comment.likes || 0) + 1; // Increment likes
+    await comment.save();
+    res.json({ likes: comment.likes });
+  } catch (error) {
+    console.error("Error liking comment:", error);
+    res.status(500).json({ error: "Failed to like comment" });
+  }
+});
+
 // Start the server
 app.listen(4000, () => {
   console.log("Server running at http://localhost:4000");
