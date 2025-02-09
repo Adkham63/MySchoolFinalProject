@@ -26,23 +26,7 @@ const bucket = "myschoollc";
 app.use(express.json());
 
 app.use(cookieParser()); //cookieParser
-
-const allowedOrigins = [
-  "http://localhost:5173",
-  "https://my-school-final-project-ni0wrs64x-adkham-s-projects.vercel.app",
-];
-
-app.use(
-  cors({
-    credentials: true,
-    origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
-        return callback(null, true);
-      }
-      return callback(new Error("Not allowed by CORS"));
-    },
-  })
-);
+app.use(cors({ credentials: true, origin: "http://localhost:5173" }));
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 function getUserDataFromReq(req) {
