@@ -41,53 +41,100 @@ const CommentSection = () => {
   };
 
   return (
-    <div className="max-w-3xl mx-auto p-6 bg-white rounded-lg shadow-lg border border-gray-200">
-      <h2 className="text-3xl font-semibold text-gray-800 mb-5">
-        Leave Your Feedback
+    <div className="max-w-3xl mx-auto p-8 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl shadow-xl border border-indigo-100 transition-all duration-300 hover:shadow-2xl">
+      <h2 className="text-4xl font-bold text-indigo-800 mb-6 flex items-center gap-2">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-8 w-8"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
+          />
+        </svg>
+        Student Feedback
       </h2>
 
       <textarea
-        className="w-full p-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 mb-5"
-        placeholder="Write your comment..."
+        className="w-full p-4 border-2 border-indigo-200 rounded-xl focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 mb-6 placeholder-indigo-300 resize-none transition-all duration-200"
+        placeholder="Share your thoughts..."
         value={comment}
         onChange={(e) => setComment(e.target.value)}
+        rows="4"
       />
 
       <button
         onClick={handleAddComment}
-        className="w-full bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 transition duration-300"
+        className="w-full bg-indigo-600 text-white py-3 rounded-xl hover:bg-indigo-700 transition-all duration-300 transform hover:-translate-y-0.5 font-semibold flex items-center justify-center gap-2"
       >
-        Submit
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-5 w-5"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+        >
+          <path
+            fillRule="evenodd"
+            d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z"
+            clipRule="evenodd"
+          />
+        </svg>
+        Post Comment
       </button>
 
-      <div className="mt-6">
-        <h3 className="text-2xl font-semibold text-gray-700 mb-4">Comments:</h3>
+      <div className="mt-8">
+        <h3 className="text-2xl font-semibold text-indigo-700 mb-6 border-b-2 border-indigo-100 pb-3">
+          Community Feedback ({comments.length})
+        </h3>
         {comments.length > 0 ? (
-          <ul className="space-y-5">
+          <ul className="space-y-6">
             {comments.map((cmt) => (
               <li
                 key={cmt._id}
-                className="p-5 bg-gray-100 rounded-lg shadow-md hover:shadow-xl transition-all"
+                className="p-6 bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 group"
               >
-                <p className="text-gray-700">{cmt.text}</p>
+                <p className="text-gray-700 text-lg leading-relaxed font-medium">
+                  {cmt.text}
+                </p>
                 <div className="mt-4 flex items-center justify-between">
                   <button
                     onClick={() => handleLike(cmt._id)}
-                    className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition duration-300"
+                    className="flex items-center gap-2 px-4 py-2 rounded-lg bg-indigo-50 text-indigo-600 hover:bg-indigo-100 transition-colors duration-200"
                   >
-                    Like
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className={`h-5 w-5 ${
+                        cmt.likes > 0 ? "text-red-500" : ""
+                      }`}
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    <span className="font-medium">{cmt.likes || 0}</span>
                   </button>
-                  <span className="text-sm text-gray-500">
-                    {cmt.likes || 0} Likes
+                  <span className="text-sm text-gray-400">
+                    {new Date(cmt.createdAt).toLocaleDateString()}
                   </span>
                 </div>
               </li>
             ))}
           </ul>
         ) : (
-          <p className="text-gray-400">
-            No comments yet. Be the first to comment!
-          </p>
+          <div className="text-center py-8">
+            <p className="text-indigo-300 text-lg font-medium">
+              🌟 Be the first to share your experience!
+            </p>
+          </div>
         )}
       </div>
     </div>
