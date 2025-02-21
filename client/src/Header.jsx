@@ -10,9 +10,9 @@ const Header = () => {
 
   // Navigation items
   const menuItems = [
-    { name: "Home", path: "/" },
-    { name: "About Us", path: "/about" },
-    { name: "Contact Us", path: "/contact" },
+    { name: "Bosh sahifa", path: "/" },
+    { name: "Biz haqimizda", path: "/about" },
+    { name: "Biz bilan bog'lanish", path: "/contact" },
   ];
 
   return (
@@ -25,7 +25,7 @@ const Header = () => {
           viewBox="0 0 24 24"
           strokeWidth={1.5}
           stroke="currentColor"
-          className="w-8 h-8 text-black" // Black color for logo
+          className="w-7 h-7 text-black" // Black color for logo
           aria-label="Brand Icon"
         >
           <path
@@ -34,7 +34,7 @@ const Header = () => {
             d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443m-7.007 11.55A5.981 5.981 0 0 0 6.75 15.75v-1.5"
           />
         </svg>
-        <span className="font-bold text-2xl text-black">My School LC</span>{" "}
+        <span className="font-bold text-md text-black">My School LC</span>{" "}
         {/* Black color for the brand name */}
       </Link>
 
@@ -44,7 +44,7 @@ const Header = () => {
           <Link
             key={index}
             to={item.path}
-            className={`text-lg font-medium transition-all duration-300 px-4 py-2 rounded-md ${
+            className={`text-md font-medium transition-all duration-300 px-1 py-2 rounded-md ${
               location.pathname === item.path
                 ? "text-white bg-primary"
                 : "text-black hover:text-white hover:bg-primary/80" // Darker hover for non-active pages

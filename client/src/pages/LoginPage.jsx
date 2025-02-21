@@ -16,10 +16,10 @@ const LoginPage = () => {
     try {
       const { data } = await axios.post("/api/login", { email, password });
       setUser(data);
-      toast.success("Login successful"); // Show success notification
+      toast.success("Kirish muvaffaqiyatli"); // Show success notification
       setTimeout(() => setRedirect(true), 1000); // Delay redirection by 2 seconds
     } catch (e) {
-      toast.error("Login failed"); // Show error notification
+      toast.error("Kirish muvaffaqiyatsiz tugadi"); // Show error notification
     }
   }
 
@@ -30,25 +30,25 @@ const LoginPage = () => {
   return (
     <div className="h-screen flex items-center justify-center">
       <div className="mb-16">
-        <h1 className="text-4xl text-center mb-4">Login Page</h1>
+        <h1 className="text-4xl text-center mb-4">Kirish Sahifasi</h1>
         <form className="max-w-md mx-auto" onSubmit={handleLoginSubmit}>
           <input
             type="email"
-            placeholder="Your email"
+            placeholder="Sizning elektron pochtangiz"
             value={email}
             onChange={(ev) => setEmail(ev.target.value)}
           />
           <input
             type="password"
-            placeholder="Password"
+            placeholder="Maxfiy so'z"
             value={password}
             onChange={(ev) => setPassword(ev.target.value)}
           />
-          <button className="primary">Login</button>
+          <button className="primary">Kirish</button>
           <div className="text-center py-2 text-gray-500">
-            Don't have an account yet?{" "}
+            Hali hisobingiz yo'qmi?{" "}
             <Link className="underline text-black" to={"/register"}>
-              Register now
+              Hozir ro'yxatdan o'ting
             </Link>
           </div>
         </form>

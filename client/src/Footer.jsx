@@ -8,9 +8,9 @@ const Footer = () => {
 
   // Navigation items
   const menuItems = [
-    { name: "Home", path: "/" },
-    { name: "About Us", path: "/about" },
-    { name: "Contact Us", path: "/contact" },
+    { name: "Bosh sahifa", path: "/" },
+    { name: "Biz haqimizda", path: "/about" },
+    { name: "Biz bilan bog'lanish", path: "/contact" },
   ];
 
   return (
@@ -20,11 +20,12 @@ const Footer = () => {
           {/* Left Section */}
           <div>
             <p className="text-gray-600 leading-7 text-justify mb-6">
-              Welcome to My School Learning Centre, where we empower students to
-              achieve their goals in English language education. Our team of
-              expert teachers is dedicated to creating an engaging and
-              supportive learning environment for all levels, from beginners to
-              IELTS preparation.
+              My School Learning Centre, xush kelibsiz, bu yerda biz
+              o‘quvchilarga imkoniyat beramiz ingliz tilini o'qitishda o'z
+              maqsadlariga erishish. Bizning jamoamiz ekspert o'qituvchilar jalb
+              qilish uchun bag'ishlangan va yangi boshlanuvchilardan tortib
+              barcha darajalar uchun qo'llab-quvvatlovchi o'quv muhiti IELTSga
+              tayyorgarlik.
             </p>
           </div>
 
@@ -79,7 +80,8 @@ const Footer = () => {
         <div className="mt-12">
           <hr className="border-gray-200 mb-5" />
           <p className="text-center text-gray-600 text-sm">
-            Copyright © 2025 My School LC - All Rights Reserved.
+            Mualliflik huquqi © 2025 My School LC - Barcha huquqlar
+            himoyalangan.
           </p>
         </div>
       </div>

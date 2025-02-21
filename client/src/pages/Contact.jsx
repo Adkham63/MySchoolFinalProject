@@ -11,7 +11,7 @@ const Contact = () => {
       {/* Header */}
       <div className="text-center text-3xl font-semibold text-gray-700 mb-12">
         <p>
-          CONTACT <span className="text-gray-900">US</span>
+          Biz bilan <span className="text-gray-900">bog'lanish</span>
         </p>
       </div>
 
@@ -27,7 +27,7 @@ const Contact = () => {
         {/* Contact Information */}
         <div className="flex flex-col justify-center items-start gap-6 p-8 bg-white shadow-lg rounded-xl max-w-lg w-full">
           <p className="font-semibold text-2xl text-gray-800">
-            Our Learning Center
+            Bizning O'quv Markazimiz
           </p>
 
           <div className="flex items-center gap-4">
@@ -38,7 +38,7 @@ const Contact = () => {
               className="flex items-center gap-3 bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium py-3 px-5 rounded-lg shadow-md transition-transform duration-300 hover:scale-105"
             >
               <FaMapMarkerAlt className="text-lg" />
-              г. Ташкент, метро Чиланзар - 17 кв.
+              Toshkent shahri, Chilonzor metrosi - 17 kv.
             </a>
           </div>
 
@@ -75,18 +75,18 @@ const Contact = () => {
           </div>
 
           <p className="font-semibold text-2xl text-gray-800 mt-6">
-            Join Our Team
+            Jamoamizga Qo'shiling
           </p>
           <p className="text-gray-700">
-            Become a part of our dedicated teaching community and contribute to
-            empowering students with international English language skills.
+            Bizning bag'ishlangan o'quv hamjamiyat bir qismi bo'l va hissa
+            talabalarni xalqaro ingliz tili ko'nikmalariga ega bo'lish.
           </p>
 
           <button
             onClick={() => navigate("/register")}
             className="mt-6 w-full border border-blue-700 bg-blue-700 text-white py-3 px-8 rounded-lg font-medium hover:bg-blue-800 transition-transform duration-300 shadow-md hover:scale-105"
           >
-            Explore Opportunities
+            Imkoniyatlarni O'rganing
           </button>
         </div>
       </div>

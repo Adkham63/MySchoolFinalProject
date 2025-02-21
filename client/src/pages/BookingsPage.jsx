@@ -51,14 +51,14 @@ const AlertModal = ({ message, onClose, type }) => {
               type === "success" ? "text-green-600" : "text-red-600"
             }`}
           >
-            {type === "success" ? "Success!" : "Oops!"}
+            {type === "success" ? "Muvaffaqiyat!" : "Oops!"}
           </h2>
           <p className="text-gray-600 mb-6 px-4">{message}</p>
           <button
             onClick={onClose}
             className="bg-indigo-600 text-white px-8 py-3 rounded-xl font-semibold hover:bg-indigo-700 transition-all duration-300 transform hover:scale-105 w-full"
           >
-            Close
+            Yopish
           </button>
         </div>
       </div>
@@ -83,7 +83,10 @@ const BookingsPage = () => {
       setBookings((prev) =>
         prev.filter((booking) => booking._id !== bookingId)
       );
-      setAlert({ message: "Booking successfully canceled!", type: "success" });
+      setAlert({
+        message: "Bronlash muvaffaqiyatli bekor qilindi!",
+        type: "success",
+      });
       setTimeout(() => navigate("/account/bookings"), 2000);
     } catch (error) {
       console.error("Error canceling booking:", error);
@@ -115,7 +118,7 @@ const BookingsPage = () => {
               d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
             ></path>
           </svg>
-          My Bookings
+          Mening Rezervasyonlarim
         </h1>
 
         <div className="space-y-6">
@@ -138,11 +141,11 @@ const BookingsPage = () => {
                   </svg>
                 </div>
                 <h3 className="text-2xl font-semibold text-gray-700 mb-2">
-                  No Bookings Found
+                  Hech Qanday Buyurtma Topilmadi
                 </h3>
                 <p className="text-gray-500">
-                  It seems you haven't made any bookings yet or the teacher's
-                  profile was deleted.
+                  Siz hali hech qanday buyurtma bermaganga o'xshaysiz yoki
+                  o'qituvchi Profil o'chirildi.
                 </p>
               </div>
             </div>
@@ -187,7 +190,7 @@ const BookingsPage = () => {
                             />
                           </svg>
                           <span className="text-2xl font-semibold">
-                            Total price: UZS {booking.price}
+                            Umumiy narxi: so'm {booking.price}
                           </span>
                         </div>
                       </div>
@@ -214,7 +217,7 @@ const BookingsPage = () => {
                           d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
                         ></path>
                       </svg>
-                      Cancel Booking
+                      Rezervasyonni Bekor Qilish
                     </button>
                   ) : (
                     <div className="text-red-500 font-semibold flex items-center gap-2">
@@ -231,7 +234,7 @@ const BookingsPage = () => {
                           d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
                         ></path>
                       </svg>
-                      Teacher Profile Deleted
+                      O'qituvchi Profili O'chirildi
                     </div>
                   )}
                 </div>

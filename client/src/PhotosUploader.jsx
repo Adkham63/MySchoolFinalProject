@@ -9,7 +9,7 @@ const PhotosUploader = ({ addedPhotos, onChange }) => {
   async function addPhotoByLink(ev) {
     ev.preventDefault();
     if (!photoLink) {
-      alert("Please provide a valid photo URL.");
+      alert("Iltimos, tegishli fotosurat URL manzilini taqdim eting.");
       return;
     }
     setIsUploading(true); // Start loading
@@ -30,7 +30,7 @@ const PhotosUploader = ({ addedPhotos, onChange }) => {
   function uploadPhoto(ev) {
     const files = ev.target.files;
     if (files.length === 0) {
-      alert("Please select a file to upload.");
+      alert("Yuklash uchun faylni tanlang.");
       return;
     }
     const data = new FormData();
@@ -70,7 +70,7 @@ const PhotosUploader = ({ addedPhotos, onChange }) => {
           value={photoLink}
           onChange={(ev) => setPhotoLink(ev.target.value)}
           type="text"
-          placeholder="Add photo using a link ... jpg"
+          placeholder="Havola orqali rasm qo'shing ... jpg"
           className="border p-2 rounded-md"
         />
         <button
@@ -79,7 +79,7 @@ const PhotosUploader = ({ addedPhotos, onChange }) => {
           disabled={isUploading || !photoLink}
           className="bg-gray-200 px-4 rounded-2xl"
         >
-          {isUploading ? "Uploading..." : "Add Photo"}
+          {isUploading ? "Yuklanmoqda..." : "Rasm qo'shish"}
         </button>
       </div>
 
@@ -173,7 +173,7 @@ const PhotosUploader = ({ addedPhotos, onChange }) => {
               d="M12 16.5V9.75m0 0 3 3m-3-3-3 3M6.75 19.5a4.5 4.5 0 0 1-1.41-8.775 5.25 5.25 0 0 1 10.233-2.33 3 3 0 0 1 3.758 3.848A3.752 3.752 0 0 1 18 19.5H6.75Z"
             />
           </svg>
-          Upload
+          Yuklash
         </label>
       </div>
     </>

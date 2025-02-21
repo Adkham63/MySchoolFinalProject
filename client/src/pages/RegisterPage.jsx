@@ -36,9 +36,13 @@ export default function RegisterPage() {
         email,
         password,
       });
-      toast.success("Registration successful. Now you can log in."); // Success notification
+      toast.success(
+        "Ro'yxatdan muvaffaqiyatli. Endi siz tizimga kirishingiz mumkin."
+      ); // Success notification
     } catch (e) {
-      toast.error("Registration failed. Please try again later."); // Error notification
+      toast.error(
+        "Ro'yxatdan muvaffaqiyatsiz. Iltimos, keyinroq qayta urinib ko'ring."
+      ); // Error notification
     } finally {
       setLoading(false);
     }
@@ -51,7 +55,7 @@ export default function RegisterPage() {
       <div className="mb-16">
         {" "}
         {/* Add bottom margin */}
-        <h1 className="text-4xl text-center mb-4">Register</h1>
+        <h1 className="text-4xl text-center mb-4">Ro'yxatdan o'tish</h1>
         <form className="max-w-md mx-auto" onSubmit={registerUser}>
           <input
             type="text"
@@ -69,21 +73,21 @@ export default function RegisterPage() {
           />
           <input
             type="password"
-            placeholder="password"
+            placeholder="*******"
             value={password}
             onChange={(ev) => setPassword(ev.target.value)}
             disabled={loading}
           />
           <button className="primary" disabled={loading}>
-            {loading ? "Registering..." : "Register"}
+            {loading ? "Ro'yxatdan..." : "Ro'yxatdan o'tish"}
           </button>
           {error && (
             <div className="text-red-500 text-center mt-2">{error}</div>
           )}
           <div className="text-center py-2 text-gray-500">
-            Already a member?{" "}
+            Allaqachon a'zo?{" "}
             <Link className="underline text-black" to={"/login"}>
-              Login
+              Kirish
             </Link>
           </div>
         </form>

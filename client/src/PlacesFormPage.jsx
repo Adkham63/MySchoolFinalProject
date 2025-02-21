@@ -15,8 +15,8 @@ const PlacesFormPage = () => {
   const [extraInfo, setExtraInfo] = useState("");
   const [checkIn, setCheckIn] = useState("");
   const [checkOut, setCheckOut] = useState("");
-  const [maxGuests, setMaxGuests] = useState(1);
-  const [price, setPrice] = useState(100);
+  const [maxGuests, setMaxGuests] = useState(10);
+  const [price, setPrice] = useState(74000);
   const [addedPhotos, setAddedPhotos] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [redirect, setRedirect] = useState(false);
@@ -79,22 +79,22 @@ const PlacesFormPage = () => {
 
   const deletePlace = async () => {
     Swal.fire({
-      title: "Are you sure?",
-      text: "This will permanently delete the teacher's profile and related bookings.",
+      title: "Ishonchingiz komilmi?",
+      text: "Bu o'qituvchining profilini va tegishli buyurtmalarni butunlay o'chirib tashlaydi.",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#d33",
       cancelButtonColor: "#3085d6",
-      confirmButtonText: "Yes, delete it!",
-      cancelButtonText: "Cancel",
+      confirmButtonText: "Ha, uni o'chiring!",
+      cancelButtonText: "Bekor qilish",
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
           await axios.delete(`/api/places/${id}`);
           Swal.fire(
-            "Deleted!",
-            "The teacher's profile has been deleted.",
-            "success"
+            "O'chirildi!",
+            "O'qituvchining profili o'chirildi.",
+            "muvaffaqiyat"
           );
           setRedirect(true);
         } catch (error) {
@@ -117,14 +117,14 @@ const PlacesFormPage = () => {
     <div>
       <AccountNav />
       <form onSubmit={savePlace}>
-        <h2 className="text-2xl mt-4">Full name of the teacher:</h2>
+        <h2 className="text-2xl mt-4">O'qituvchining to'liq ismi:</h2>
         <input
           value={title}
           onChange={(ev) => setTitle(ev.target.value)}
           type="text"
           placeholder="e.g. Rasulova Laylo"
         />
-        <h2 className="text-2xl mt-4">A short description or quote:</h2>
+        <h2 className="text-2xl mt-4">Qisqa tavsif yoki iqtibos:</h2>
         <input
           value={address}
           onChange={(ev) => setAddress(ev.target.value)}
@@ -144,11 +144,11 @@ const PlacesFormPage = () => {
           )}
         </div>
 
-        <h2 className="text-2xl mt-4">Teacher's profile photo:</h2>
+        <h2 className="text-2xl mt-4">O'qituvchining Profil fotosurati:</h2>
         <PhotosUploader addedPhotos={addedPhotos} onChange={setAddedPhotos} />
 
         <div>
-          <h2 className="text-2xl mt-4">Description:</h2>
+          <h2 className="text-2xl mt-4">Tavsif:</h2>
           <textarea
             value={description}
             onChange={(ev) => setDescription(ev.target.value)}
@@ -157,13 +157,13 @@ const PlacesFormPage = () => {
 
         <div>
           <h2 className="text-2xl mt-4 mb-4">
-            Services provided to the group:
+            Guruhga taqdim etiladigan xizmatlar:
           </h2>
           <Perks selected={perks} onChange={setPerks} />
         </div>
 
         <div>
-          <h2 className="text-2xl mt-4">Extra Info</h2>
+          <h2 className="text-2xl mt-4">Qo'shimcha Ma'lumot</h2>
           <textarea
             value={extraInfo}
             onChange={(ev) => setExtraInfo(ev.target.value)}
@@ -171,10 +171,10 @@ const PlacesFormPage = () => {
         </div>
 
         <div>
-          <h2 className="text-2xl mt-4 mb-4">Lesson Information:</h2>
+          <h2 className="text-2xl mt-4 mb-4">Dars haqida ma'lumot:</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
             <div>
-              <h3>Lesson start time</h3>
+              <h3>Darsning boshlanish vaqti</h3>
               <input
                 value={checkIn}
                 onChange={(ev) => setCheckIn(ev.target.value)}
@@ -183,7 +183,7 @@ const PlacesFormPage = () => {
               />
             </div>
             <div>
-              <h3>Lesson end time</h3>
+              <h3>Dars tugash vaqti</h3>
               <input
                 value={checkOut}
                 onChange={(ev) => setCheckOut(ev.target.value)}
@@ -192,7 +192,7 @@ const PlacesFormPage = () => {
               />
             </div>
             <div>
-              <h3>Max students:</h3>
+              <h3>Maksimal talabalar:</h3>
               <input
                 value={maxGuests}
                 onChange={(ev) => setMaxGuests(ev.target.value)}
@@ -200,7 +200,7 @@ const PlacesFormPage = () => {
               />
             </div>
             <div>
-              <h3>Price per lesson:</h3>
+              <h3>Bir dars narxi:</h3>
               <input
                 value={price}
                 onChange={(ev) => setPrice(ev.target.value)}
@@ -215,7 +215,7 @@ const PlacesFormPage = () => {
             className="bg-blue-600 text-white py-2 px-6 rounded-lg font-semibold text-lg hover:bg-blue-700 transition duration-300 disabled:bg-blue-300"
             disabled={isSubmitting}
           >
-            {isSubmitting ? "Saving..." : "Save"}
+            {isSubmitting ? "Saqlanmoqda..." : "Saqlash"}
           </button>
 
           {id && (
@@ -224,7 +224,7 @@ const PlacesFormPage = () => {
               onClick={deletePlace}
               className="bg-red-600 text-white py-2 px-6 rounded-lg font-semibold text-lg hover:bg-red-700 transition duration-300"
             >
-              Delete Teacher Profile
+              O'qituvchi profilini o'chirish
             </button>
           )}
         </div>

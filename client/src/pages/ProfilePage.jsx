@@ -31,8 +31,10 @@ const ProfilePage = () => {
       setUser(null);
       setRedirect("/"); // Redirect to homepage after logout
     } catch (error) {
-      console.error("Logout failed:", error);
-      alert("An error occurred during logout. Please try again.");
+      console.error("Chiqish muvaffaqiyatsiz tugadi:", error);
+      alert(
+        "Chiqish paytida xatolik yuz berdi. Iltimos, qayta urinib ko'ring."
+      );
     }
   }
 
@@ -48,14 +50,14 @@ const ProfilePage = () => {
       {subpage === "profile" && (
         <div className="max-w-lg mx-auto mt-12 bg-white shadow-xl rounded-3xl p-10 text-center transform hover:scale-105 transition duration-300">
           <h2 className="text-4xl font-semibold text-gray-800 mb-6">
-            Welcome, <span className="text-primary">{user.name}</span>!
+            Xush kelibsiz, <span className="text-primary">{user.name}</span>!
           </h2>
           <p className="text-gray-600 mb-6">{user.email}</p>
           <button
             onClick={logout}
             className="bg-red-600 text-white py-3 px-10 rounded-full hover:bg-red-700 transition-all duration-300 shadow-lg hover:shadow-xl"
           >
-            Log out
+            Chiqish
           </button>
         </div>
       )}
@@ -64,11 +66,11 @@ const ProfilePage = () => {
       {subpage === "bookings" && (
         <div className="max-w-4xl mx-auto mt-12 bg-white shadow-lg rounded-3xl p-10">
           <h2 className="text-3xl font-semibold text-gray-800 mb-4">
-            Your Bookings
+            Sizning Rezervasyonlaringiz
           </h2>
           <p className="text-gray-600 text-lg">
-            You have no bookings yet. Start exploring and book your first
-            lesson!
+            Sizda hali buyurtma yo'q. Kashf qilishni boshlang va birinchisini
+            bron qiling dars!
           </p>
         </div>
       )}

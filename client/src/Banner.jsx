@@ -16,17 +16,19 @@ const Banner = () => {
       <div className="flex-1 py-8 sm:py-10 md:py-16 lg:py-24 font-semibold text-white max-w-full">
         <div>
           <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold mb-4 leading-tight">
-            Learn English Confidently with My School LC!
+            My School LC bilan ingliz tilini ishonchli o'rganing!!
           </h1>
           <p className="text-xs sm:text-sm md:text-base lg:text-lg leading-relaxed mb-4">
-            Our Learning Centre offers personalized lessons taught by certified
-            instructors for students at all levels, from beginner to IELTS
-            preparation. Join us to master English skills for academic, travel,
-            or professional success.
+            Bizning o'quv markazimiz sertifikatlangan tomonidan o'qitiladigan
+            shaxsiy darslarni taklif etadi boshlang'ichdan IELTSGACHA bo'lgan
+            barcha darajadagi talabalar uchun o'qituvchilar tayyorgarlik.
+            Akademik, sayohat uchun ingliz tilini o'rganish uchun bizga
+            qo'shiling, yoki professional muvaffaqiyat.
           </p>
           <p className="text-xs sm:text-sm md:text-base lg:text-lg leading-relaxed mb-4">
-            Sign up now and enjoy trial lessons, flexible schedules, and access
-            to expert teaching tailored to your goals.
+            Hozir ro'yxatdan o'ting va sinov darslari, moslashuvchan jadvallar
+            va kirishdan zavqlaning maqsadlaringizga moslashtirilgan
+            mutaxassislarni o'qitish.
           </p>
         </div>
         <button
@@ -36,7 +38,7 @@ const Banner = () => {
           }}
           className="bg-white text-xs sm:text-sm md:text-base lg:text-lg text-gray-600 px-10 py-4 rounded-full mt-6 hover:scale-105 transition-all"
         >
-          Get Started Today
+          Bugundan Boshlang
         </button>
       </div>
 

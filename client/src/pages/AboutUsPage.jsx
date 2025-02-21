@@ -6,7 +6,7 @@ const AboutUsPage = () => {
   return (
     <div className="bg-gray-50">
       <div className="text-center text-2xl pt-10 text-gray-500">
-        ABOUT <span className="text-gray-700 font-medium">US</span>
+        Biz <span className="text-gray-700 font-medium">haqimizda</span>
       </div>
       <div className="my-10 flex flex-col md:flex-row gap-12">
         <img
@@ -17,71 +17,74 @@ const AboutUsPage = () => {
 
         <div className="my-10 flex flex-col justify-center gap-6 md:w-2/4 text-sm text-gray-600">
           <p>
-            Welcome to{" "}
+            Xush kelibsiz{" "}
             <span className="text-primary font-medium">
               My School Learning Centre
             </span>
-            , your dedicated partner in achieving your English language goals.
-            At My School, we understand the challenges students face in finding
-            the right resources, connecting with experienced teachers, and
-            maintaining consistent progress in their learning journey.
+            , Ingliz tilidagi maqsadlaringizga erishishda sodiq hamkoringiz.
+            "Mening maktabim"da biz o'quvchilarning topishda qanday
+            qiyinchiliklarga duch kelishini tushunamiz to'g'ri manbalar,
+            tajribali o'qituvchilar bilan bog'lanish va ularning ta'lim yo'lida
+            izchil taraqqiyotni saqlab qolish.
           </p>
           <p>
-            <span className="text-primary font-medium">My School</span> is
-            committed to excellence in English education. We continually work to
-            enhance our platform, integrating innovative methods to improve your
-            learning experience and provide top-notch educational support.
-            Whether you're taking your first steps in English or preparing for
-            IELTS, <span className="text-primary font-medium">My School</span>{" "}
-            is here to guide you every step of the way.
+            <span className="text-primary font-medium">My School</span>{" "}
+            hisoblanadi ingliz tili ta'limida mukammallikka intiladi. Biz doimo
+            ishlaymiz platformangizni takomillashtirish, innovatsion usullarni
+            birlashtirish o'rganish tajribasi va yuqori darajadagi ta'lim
+            yordamini taqdim etadi. Ingliz tilida birinchi qadamlaringizni
+            tashlayapsizmi yoki tayyorgarlik ko'ryapsizmi IELTS,{" "}
+            <span className="text-primary font-medium">My School</span> shu
+            yerda sizga yo'lning har bir qadamini yo'naltirish uchun.
           </p>
-          <b className="text-gray-800">Our Vision</b>
+          <b className="text-gray-800">Bizning Vizyonimiz</b>
           <p>
-            Our vision at{" "}
+            Bizning fikrimiz{" "}
             <span className="text-primary font-medium">
               My School Learning Centre
             </span>{" "}
-            is to create a dynamic and supportive environment for every student.
-            We aim to connect learners with exceptional teachers, making it
-            easier for you to achieve your goals and excel in your English
-            language journey.
+            har bir talaba uchun dinamik va qo'llab-quvvatlovchi muhit
+            yaratishdir. Biz o'quvchilarni ajoyib o'qituvchilar bilan bog'lashni
+            maqsad qilganmiz maqsadlaringizga erishishingiz va ingliz tilida
+            muvaffaqiyat qozonishingiz osonroq til sayohati.
           </p>
         </div>
       </div>
       <div className="text-xl my-4 text-center text-gray-700">
         <p>
-          WHY <span className="text-gray-800 font-semibold">CHOOSE US:</span>
+          WHY{" "}
+          <span className="text-gray-800 font-semibold">BIZNI TANLANG:</span>
         </p>
       </div>
-      <div className="flex flex-col md:flex-row mb-20 gap-6 max-w-5xl">
-        <div className="border px-10 md:px-16 py-8 sm:py-16 flex flex-col gap-5 text-[15px] hover:bg-primary hover:text-white transition-all duration-300 text-gray-600 cursor-pointer rounded-lg shadow-md">
-          <div className="flex items-center">
+      <div className="flex flex-col justify-center items-center md:flex-row mb-20 gap-6 md:gap-12 max-w-5xl mx-auto">
+        <div className="border px-10 md:px-16 py-8 sm:py-16 flex flex-col gap-5 text-[15px] hover:bg-primary hover:text-white transition-all duration-300 text-gray-600 cursor-pointer rounded-lg shadow-md text-center">
+          <div className="flex items-center justify-center">
             <FaCheckCircle className="text-primary mr-2" />
-            <b>Efficiency:</b>
+            <b>Samaradorlik:</b>
           </div>
           <p>
-            Streamlined registration and scheduling for trial lessons that adapt
-            to your busy lifestyle.
+            Moslashtirilgan sinov darslarini ro'yxatdan o'tkazish va
+            rejalashtirish sizning band turmush tarzingizga.
           </p>
         </div>
-        <div className="border px-10 md:px-16 py-8 sm:py-16 flex flex-col gap-5 text-[15px] hover:bg-primary hover:text-white transition-all duration-300 text-gray-600 cursor-pointer rounded-lg shadow-md">
-          <div className="flex items-center">
+        <div className="border px-10 md:px-16 py-8 sm:py-16 flex flex-col gap-5 text-[15px] hover:bg-primary hover:text-white transition-all duration-300 text-gray-600 cursor-pointer rounded-lg shadow-md text-center">
+          <div className="flex items-center justify-center">
             <FaCheckCircle className="text-primary mr-2" />
-            <b>Convenience:</b>
+            <b>Qulaylik:</b>
           </div>
           <p>
-            Easy access to a network of experienced English teachers at all
-            levels, from beginner to IELTS.
+            Tajribali ingliz tili o'qituvchilari tarmog'iga oson kirish
+            darajalar, boshlang'ichdan IELTSGACHA.
           </p>
         </div>
-        <div className="border px-10 md:px-16 py-8 sm:py-16 flex flex-col gap-5 text-[15px] hover:bg-primary hover:text-white transition-all duration-300 text-gray-600 cursor-pointer rounded-lg shadow-md">
-          <div className="flex items-center">
+        <div className="border px-10 md:px-16 py-8 sm:py-16 flex flex-col gap-5 text-[15px] hover:bg-primary hover:text-white transition-all duration-300 text-gray-600 cursor-pointer rounded-lg shadow-md text-center">
+          <div className="flex items-center justify-center">
             <FaCheckCircle className="text-primary mr-2" />
-            <b>Personalization:</b>
+            <b>Shaxsiylashtirish:</b>
           </div>
           <p>
-            Tailored learning paths and guidance to help you achieve your
-            English language goals efficiently.
+            Sizga erishishga yordam beradigan maxsus o'quv yo'llari va
+            ko'rsatmalar Ingliz tili maqsadlari samarali.
           </p>
         </div>
       </div>

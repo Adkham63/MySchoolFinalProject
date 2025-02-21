@@ -25,31 +25,31 @@ const Perks = ({ selected, onChange }) => {
       <label className="border p-4 flex rounded-2xl gap-2 mb-4 items-center cursor-pointer">
         <input
           type="checkbox"
-          checked={selected.includes("Support Teacher")}
-          name="Support Teacher" // Match exactly with the database
+          checked={selected.includes("Yordamchi o'qituvchi")}
+          name="Yordamchi o'qituvchi" // Match exactly with the database
           onChange={handleCbClick}
         />
-        <span>Support Teacher</span>
+        <span>Yordamchi o'qituvchi</span>
       </label>
 
       <label className="border p-4 flex rounded-2xl gap-2 mb-4 items-center cursor-pointer">
         <input
           type="checkbox"
-          checked={selected.includes("Educational Materials")}
-          name="Educational Materials" // Match exactly with the database
+          checked={selected.includes("O'quv materiallari")}
+          name="O'quv materiallari" // Match exactly with the database
           onChange={handleCbClick}
         />
-        <span>Educational Materials</span>
+        <span>O'quv materiallari</span>
       </label>
 
       <label className="border p-4 flex rounded-2xl gap-2 mb-4 items-center cursor-pointer">
         <input
           type="checkbox"
-          checked={selected.includes("Individual Approach")}
-          name="Individual Approach" // Match exactly with the database
+          checked={selected.includes("Individual yondashuv")}
+          name="Individual yondashuv" // Match exactly with the database
           onChange={handleCbClick}
         />
-        <span>Individual Approach</span>
+        <span>Individual yondashuv</span>
       </label>
     </>
   );

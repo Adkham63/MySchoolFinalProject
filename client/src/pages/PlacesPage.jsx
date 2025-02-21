@@ -41,7 +41,7 @@ const PlacesPage = () => {
                 clipRule="evenodd"
               />
             </svg>
-            Add New Teacher
+            Yangi O'qituvchi Qo'shish
           </Link>
         </div>
       )}
@@ -49,7 +49,7 @@ const PlacesPage = () => {
       <div className="mt-4">
         {places.length === 0 ? (
           <p className="text-xl text-center text-gray-600">
-            There are no teacher profiles at the moment.
+            Ayni paytda o'qituvchi profillari yo'q.
           </p>
         ) : (
           places.map((place) => {
