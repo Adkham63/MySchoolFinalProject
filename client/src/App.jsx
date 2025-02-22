@@ -12,6 +12,8 @@ import BookingsPage from "./pages/BookingsPage";
 import BookingPage from "./pages/BookingPage";
 import AboutUsPage from "./pages/AboutUsPage";
 import Contact from "./pages/Contact";
+import ForumPage from "./pages/ForumPage";
+import ForumPostPage from "./pages/ForumPostPage";
 import { UserContextProvider } from "./UserContext";
 import axios from "axios";
 
@@ -36,6 +38,8 @@ function App() {
           <Route path="/account/bookings/:id" element={<BookingPage />} />
           <Route path="/about" element={<AboutUsPage />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/forum" element={<ForumPage />} />
+          <Route path="/forum/:postId" element={<ForumPostPage />} />
         </Route>
       </Routes>
     </UserContextProvider>

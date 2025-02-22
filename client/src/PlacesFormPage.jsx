@@ -5,6 +5,7 @@ import Swal from "sweetalert2";
 import Perks from "./Perks.jsx";
 import PhotosUploader from "./PhotosUploader";
 import AccountNav from "./AccountNav.jsx";
+import LevelsSelector from "./LevelsSelector.jsx";
 
 const PlacesFormPage = () => {
   const { id } = useParams();
@@ -20,6 +21,7 @@ const PlacesFormPage = () => {
   const [addedPhotos, setAddedPhotos] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [redirect, setRedirect] = useState(false);
+  const [levels, setLevels] = useState([]);
 
   useEffect(() => {
     if (!id) return;
@@ -43,6 +45,7 @@ const PlacesFormPage = () => {
         setCheckOut(data.checkOut);
         setMaxGuests(data.maxGuests);
         setPrice(data.price);
+        setLevels(data.levels || []);
       })
       .catch((error) => {
         console.error("Error fetching place details:", error);
@@ -63,6 +66,7 @@ const PlacesFormPage = () => {
       checkOut,
       maxGuests,
       price,
+      levels,
     };
 
     try {
@@ -154,6 +158,9 @@ const PlacesFormPage = () => {
             onChange={(ev) => setDescription(ev.target.value)}
           />
         </div>
+
+        <h2 className="text-2xl mt-4">O'qituvchi darajalari:</h2>
+        <LevelsSelector selected={levels} onChange={setLevels} />
 
         <div>
           <h2 className="text-2xl mt-4 mb-4">

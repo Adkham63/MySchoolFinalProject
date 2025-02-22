@@ -8,6 +8,11 @@ const placeSchema = new mongoose.Schema({
   description: { type: String, required: true },
   perks: [String],
   extraInfo: String,
+  levels: {
+    type: [String],
+    enum: ["Beginner", "Intermediate", "Advanced", "IELTS"],
+    required: true,
+  },
   checkIn: { type: String, required: true }, // Changed to String
   checkOut: { type: String, required: true }, // Changed to String
   maxGuests: { type: Number, required: true },

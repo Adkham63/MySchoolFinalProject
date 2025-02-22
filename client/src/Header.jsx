@@ -13,6 +13,7 @@ const Header = () => {
     { name: "Bosh sahifa", path: "/" },
     { name: "Biz haqimizda", path: "/about" },
     { name: "Biz bilan bog'lanish", path: "/contact" },
+    { name: "Jamiyat Forumi", path: "/forum" },
   ];
 
   return (

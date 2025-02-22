@@ -99,6 +99,20 @@ const PlacePage = () => {
           </p>
         </div>
 
+        <div className="mt-4">
+          <h3 className="font-semibold">O'qitish Darajalari:</h3>
+          <div className="flex flex-wrap gap-2 mt-2">
+            {place.levels?.map((level) => (
+              <span
+                key={level}
+                className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm"
+              >
+                {level}
+              </span>
+            ))}
+          </div>
+        </div>
+
         {/* Perks */}
         <div>
           <h2 className="font-semibold text-xl sm:text-2xl text-gray-800 mt-4 sm:mt-6">

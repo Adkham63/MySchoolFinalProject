@@ -5,6 +5,7 @@ const User = require("./models/User.js");
 const Place = require("./models/Place.js");
 const Booking = require("./models/Booking.js");
 const Comment = require("./models/Comments.js");
+const ForumPost = require("./models/ForumPost.js");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const cookieParser = require("cookie-parser");
@@ -189,7 +190,6 @@ app.post(
 
 // Place Creation
 app.post("/api/places", (req, res) => {
-  // Connect to MongoDB (Only need this once)
   mongoose.connect(process.env.MONGO_URL);
   const { token } = req.cookies;
   const {
@@ -203,9 +203,17 @@ app.post("/api/places", (req, res) => {
     checkOut,
     maxGuests,
     price,
+    levels, // Make sure this is extracted from req.body
   } = req.body;
 
   if (!token) return res.status(401).json("Unauthorized");
+
+  // Add validation HERE
+  if (!levels || levels.length === 0) {
+    return res
+      .status(400)
+      .json({ error: "At least one level must be selected" });
+  }
 
   jwt.verify(token, jwtSecret, {}, async (err, userData) => {
     if (err) return res.status(403).json("Invalid token");
@@ -223,6 +231,7 @@ app.post("/api/places", (req, res) => {
         checkIn,
         checkOut,
         maxGuests,
+        levels,
       });
       res.json(placeDoc);
     } catch (err) {
@@ -280,6 +289,7 @@ app.put("/api/places/:id", async (req, res) => {
     checkOut,
     maxGuests,
     price,
+    levels,
   } = req.body;
 
   if (!token) {
@@ -317,6 +327,7 @@ app.put("/api/places/:id", async (req, res) => {
       checkOut,
       maxGuests,
       price,
+      levels,
     });
 
     // Save the updated place
@@ -471,6 +482,53 @@ app.post("/api/comments/:id/like", async (req, res) => {
     console.error("Error liking comment:", error);
     res.status(500).json({ error: "Failed to like comment" });
   }
+});
+
+// Forum Routes
+app.get("/api/forum", async (req, res) => {
+  try {
+    const posts = await ForumPost.find()
+      .populate("author", "name")
+      .sort({ createdAt: -1 });
+    res.json(posts);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch forum posts" });
+  }
+});
+
+app.post("/api/forum", async (req, res) => {
+  const userData = await getUserDataFromReq(req);
+  const { title, content, category } = req.body;
+
+  const post = await ForumPost.create({
+    title,
+    content,
+    author: userData.id,
+    category,
+  });
+
+  res.status(201).json(post);
+});
+
+app.post("/api/forum/:postId/replies", async (req, res) => {
+  const userData = await getUserDataFromReq(req);
+  const { content } = req.body;
+
+  const post = await ForumPost.findByIdAndUpdate(
+    req.params.postId,
+    { $push: { replies: { content, author: userData.id } } },
+    { new: true }
+  ).populate("replies.author", "name");
+
+  res.json(post);
+});
+
+// Add to index.js
+app.get("/api/forum/:postId", async (req, res) => {
+  const post = await ForumPost.findById(req.params.postId)
+    .populate("author", "name")
+    .populate("replies.author", "name");
+  res.json(post);
 });
 
 // Start the server
