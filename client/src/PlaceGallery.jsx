@@ -10,7 +10,7 @@ const PlaceGallery = ({ place }) => {
         <div className="bg-white p-8 rounded-lg max-w-4xl w-full">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-3xl font-semibold text-gray-800">
-              Fotosuratlari {place.title}
+              Photos {place.title}
             </h2>
             <button
               onClick={() => setShowAllPhotos(false)}
@@ -43,7 +43,7 @@ const PlaceGallery = ({ place }) => {
               ))
             ) : (
               <p className="col-span-full text-center text-gray-600">
-                Fotosuratlar mavjud emas
+                No photos available
               </p>
             )}
           </div>
@@ -83,7 +83,7 @@ const PlaceGallery = ({ place }) => {
               clipRule="evenodd"
             />
           </svg>
-          Ko'proq fotosuratlarni ko'rsatish
+          Show more photos
         </button>
       )}
     </div>

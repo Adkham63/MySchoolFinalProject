@@ -10,10 +10,10 @@ const Header = () => {
 
   // Navigation items
   const menuItems = [
-    { name: "Bosh sahifa", path: "/" },
-    { name: "Biz haqimizda", path: "/about" },
-    { name: "Biz bilan bog'lanish", path: "/contact" },
-    { name: "Jamiyat Forumi", path: "/forum" },
+    { name: "Home Page", path: "/" },
+    { name: "About us", path: "/about" },
+    { name: "Contact us", path: "/contact" },
+    { name: "Forum Page", path: "/forum" },
   ];
 
   return (

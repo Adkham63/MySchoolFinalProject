@@ -302,7 +302,7 @@ const PlacesFormPage = () => {
         <div className="flex justify-between mt-8">
           <button
             type="submit"
-            className="bg-primary text-white py-3 px-8 rounded-full font-semibold text-lg hover:bg-primary-dark transition disabled:opacity-70"
+            className="bg-blue-950 text-white py-3 px-8 rounded-full font-semibold text-lg hover:bg-primary-dark transition disabled:opacity-70"
             disabled={loading}
           >
             {loading ? (

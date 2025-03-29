@@ -62,8 +62,8 @@
 
 2. Пароль обычного админа:
    ```sh
-   ADMIN_EMAIL     admin@example.com
-   ADMIN_PASSWORD  StrongPassword123!
+   ADMIN_EMAIL:     admin@example.com
+   ADMIN_PASSWORD:  StrongPassword123!
    ```
 
 ---

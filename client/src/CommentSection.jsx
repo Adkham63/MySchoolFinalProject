@@ -57,7 +57,7 @@ const CommentSection = () => {
             d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
           />
         </svg>
-        Talabalar Fikri
+        Student Opinion
       </h2>
 
       <textarea
@@ -84,12 +84,12 @@ const CommentSection = () => {
             clipRule="evenodd"
           />
         </svg>
-        Fikr qoldirish
+        Leave a comment
       </button>
 
       <div className="mt-8">
         <h3 className="text-2xl font-semibold text-indigo-700 mb-6 border-b-2 border-indigo-100 pb-3">
-          Hamjamiyatning fikr-mulohazalari ({comments.length})
+          Community feedback ({comments.length})
         </h3>
         {comments.length > 0 ? (
           <ul className="space-y-6">
@@ -129,7 +129,7 @@ const CommentSection = () => {
         ) : (
           <div className="text-center py-8">
             <p className="text-indigo-300 text-lg font-medium">
-              🌟 Tajribangizni birinchi bo'lib baham ko'ring!
+              🌟 Share your experience first!
             </p>
           </div>
         )}

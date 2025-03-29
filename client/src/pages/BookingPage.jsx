@@ -33,7 +33,7 @@ const BookingPage = () => {
   }, [id]);
 
   if (loading) {
-    return <div>Yuklanmoqda...</div>; // Display loading message
+    return <div>Loading...</div>; // Display loading message
   }
 
   if (error) {
@@ -41,7 +41,7 @@ const BookingPage = () => {
   }
 
   if (!booking) {
-    return <div>Hech qanday bandlov topilmadi.</div>; // In case the booking doesn't exist
+    return <div>No bandages were found.</div>; // In case the booking doesn't exist
   }
 
   return (
@@ -50,11 +50,11 @@ const BookingPage = () => {
       <AddressLink>{booking.place.address}</AddressLink>
       <div className="bg-gray-200 p-6 my-6 rounded-2xl flex items-center justify-between">
         <div>
-          <h2 className="text-2xl mb-4">Sizning bandlov ma'lumotlaringiz:</h2>
+          <h2 className="text-2xl mb-4">Your booking information:</h2>
           <BookingDates booking={booking} />
         </div>
         <div className="bg-primary p-6 text-white rounded-2xl">
-          <div>Umumiy narx:</div>
+          <div>Total price:</div>
           <div className="text-3xl">UZS {booking.price}</div>
         </div>
       </div>

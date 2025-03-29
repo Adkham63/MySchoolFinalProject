@@ -50,14 +50,14 @@ const AlertModal = ({ message, onClose, type }) => {
               type === "success" ? "text-green-600" : "text-red-600"
             }`}
           >
-            {type === "success" ? "Muvaffaqiyat!" : "Xatolik!"}
+            {type === "success" ? "Success!" : "Error!"}
           </h2>
           <p className="text-gray-600 mb-6 px-4">{message}</p>
           <button
             onClick={onClose}
             className="bg-indigo-600 text-white px-8 py-3 rounded-xl font-semibold hover:bg-indigo-700 transition-all duration-300 transform hover:scale-105 w-full"
           >
-            Yopish
+            Close
           </button>
         </div>
       </div>
@@ -85,7 +85,7 @@ const BookingsPage = () => {
       } catch (error) {
         console.error("Error fetching data:", error);
         setAlert({
-          message: "Ma'lumotlarni yuklab bo'lmadi",
+          message: "Unable to load data",
           type: "error",
         });
       } finally {
@@ -102,13 +102,13 @@ const BookingsPage = () => {
         prev.filter((booking) => booking._id !== bookingId)
       );
       setAlert({
-        message: "Bandlov muvaffaqiyatli bekor qilindi!",
+        message: "The booking was successfully canceled!",
         type: "success",
       });
     } catch (error) {
       console.error("Error canceling booking:", error);
       setAlert({
-        message: "Bekor qilishda xatolik yuz berdi",
+        message: "There was an error in the cancellation",
         type: "error",
       });
     }
@@ -119,9 +119,7 @@ const BookingsPage = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="animate-pulse text-2xl text-gray-600">
-          Yuklanmoqda...
-        </div>
+        <div className="animate-pulse text-2xl text-gray-600">Loading...</div>
       </div>
     );
   }
@@ -147,7 +145,7 @@ const BookingsPage = () => {
                   d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
                 />
               </svg>
-              Barcha Bandlovlar
+              All bookings
             </>
           ) : (
             <>
@@ -164,7 +162,7 @@ const BookingsPage = () => {
                   d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
                 />
               </svg>
-              Mening Bandlovlarim
+              My bookings
             </>
           )}
         </h1>
@@ -189,12 +187,12 @@ const BookingsPage = () => {
                   </svg>
                 </div>
                 <h3 className="text-2xl font-semibold text-gray-700 mb-2">
-                  Bandlovlar topilmadi
+                  Bookings not found
                 </h3>
                 <p className="text-gray-500">
                   {userRole === "admin"
-                    ? "Hozircha hech qanday bandlov mavjud emas"
-                    : "Siz hali hech qanday bandlov qilmagansiz"}
+                    ? "So far, there is no bookings"
+                    : "You haven't made any bookings yet"}
                 </p>
               </div>
             </div>
@@ -223,10 +221,10 @@ const BookingsPage = () => {
                         </svg>
                         <div>
                           <h3 className="font-semibold text-blue-800">
-                            {booking.user?.name || "Foydalanuvchi"}
+                            {booking.user?.name || "User"}
                           </h3>
                           <p className="text-sm text-blue-600">
-                            {booking.user?.email || "Email mavjud emas"}
+                            {booking.user?.email || "Email is not available"}
                           </p>
                         </div>
                       </div>
@@ -247,7 +245,7 @@ const BookingsPage = () => {
 
                       <div className="flex-1">
                         <h2 className="text-2xl font-bold text-gray-800 mb-3">
-                          {booking.place?.title || "O'chirilgan profil"}
+                          {booking.place?.title || "Deleted profile"}
                         </h2>
 
                         <div className="text-xl space-y-2">
@@ -271,7 +269,7 @@ const BookingsPage = () => {
                               />
                             </svg>
                             <span className="font-semibold">
-                              Umumiy narx: so'm {booking.price}
+                              Total price: so'm {booking.price}
                             </span>
                           </div>
                         </div>
@@ -299,7 +297,7 @@ const BookingsPage = () => {
                           d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
                         />
                       </svg>
-                      Bekor qilish
+                      Cancel
                     </button>
                   ) : (
                     <div className="text-red-500 font-semibold flex items-center gap-2">
@@ -316,7 +314,7 @@ const BookingsPage = () => {
                           d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
                         />
                       </svg>
-                      O'qituvchi profili o'chirilgan
+                      Teacher profile deleted
                     </div>
                   )}
                 </div>

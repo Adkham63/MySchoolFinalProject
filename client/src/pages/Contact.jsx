@@ -17,10 +17,10 @@ const Contact = () => {
       {/* Header */}
       <div className="text-center mb-16">
         <h1 className="text-4xl font-bold text-gray-800 mb-3">
-          Biz bilan <span className="text-blue-600">bog'lanish</span>
+          Contact <span className="text-blue-600">Us</span>
         </h1>
         <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-          Har qanday savol yoki taklifingiz bo'lsa, biz bilan bog'laning
+          If you have any questions or suggestions, please contact us
         </p>
       </div>
 
@@ -38,7 +38,7 @@ const Contact = () => {
         {/* Contact Information */}
         <div className="w-full lg:w-1/2 bg-white p-8 rounded-2xl shadow-xl border border-gray-100">
           <h2 className="text-2xl font-bold text-gray-800 mb-6 pb-4 border-b border-gray-200">
-            Bizning O'quv Markazimiz
+            Our Learning Center
           </h2>
 
           {/* Contact Cards */}
@@ -54,9 +54,9 @@ const Contact = () => {
                 <FaMapMarkerAlt className="text-blue-600 text-xl" />
               </div>
               <div>
-                <h3 className="font-semibold text-gray-700 mb-1">Manzil</h3>
+                <h3 className="font-semibold text-gray-700 mb-1">Address</h3>
                 <p className="text-gray-600">
-                  Toshkent shahri, Chilonzor metrosi - 17 kv.
+                  Tashkent City, Chilanzar Metro-17 sq.
                 </p>
               </div>
             </a>
@@ -70,7 +70,9 @@ const Contact = () => {
                 <FaPhoneAlt className="text-green-600 text-xl" />
               </div>
               <div>
-                <h3 className="font-semibold text-gray-700 mb-1">Telefon</h3>
+                <h3 className="font-semibold text-gray-700 mb-1">
+                  Phone number
+                </h3>
                 <p className="text-gray-600">+998 (99) 517-64-00</p>
               </div>
             </a>
@@ -81,8 +83,10 @@ const Contact = () => {
                 <FaClock className="text-purple-600 text-xl" />
               </div>
               <div>
-                <h3 className="font-semibold text-gray-700 mb-1">Ish vaqti</h3>
-                <p className="text-gray-600">Dushanba-Shanba: 9:00 - 20:00</p>
+                <h3 className="font-semibold text-gray-700 mb-1">
+                  Working hours
+                </h3>
+                <p className="text-gray-600">Monday-Saturday: 9:00 - 20:00</p>
               </div>
             </div>
 
@@ -90,7 +94,7 @@ const Contact = () => {
             <div className="space-y-3 mt-6">
               <h3 className="font-semibold text-lg text-gray-800 flex items-center gap-2">
                 <FaTelegramPlane className="text-blue-400" />
-                Telegram kanallarimiz
+                Our Telegram channels
               </h3>
 
               <a
@@ -133,19 +137,18 @@ const Contact = () => {
           {/* Join Us Section */}
           <div className="mt-10 pt-6 border-t border-gray-200">
             <h2 className="text-2xl font-bold text-gray-800 mb-4">
-              Jamoamizga Qo'shiling
+              Join Our Team
             </h2>
             <p className="text-gray-600 mb-6">
-              Bizning bag'ishlangan o'quv hamjamiyat bir qismi bo'ling va hissa
-              qo'shing talabalarni xalqaro ingliz tili ko'nikmalariga ega
-              bo'lish.
+              Be a part of our dedicated learning community and contribute add
+              students with international English language skills divisjon.
             </p>
 
             <button
               onClick={() => navigate("/register")}
               className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white py-4 px-6 rounded-xl font-semibold hover:from-blue-700 hover:to-blue-800 transition-all duration-300 shadow-lg hover:shadow-xl"
             >
-              Imkoniyatlarni O'rganing
+              Explore The Possibilities
             </button>
           </div>
         </div>

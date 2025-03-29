@@ -18,7 +18,7 @@ const PlacePage = () => {
   }, [id]);
 
   if (!place) {
-    return <p className="text-center text-gray-500">Yuklanmoqda...</p>;
+    return <p className="text-center text-gray-500">Loading...</p>;
   }
 
   return (
@@ -34,7 +34,7 @@ const PlacePage = () => {
         <div className="space-y-6">
           <div className="my-4">
             <h2 className="font-semibold text-xl sm:text-2xl text-gray-800">
-              Tavsif
+              Description
             </h2>
             <div className="text-justify text-base sm:text-lg text-gray-700">
               {place.description.split("\n").map(
@@ -51,12 +51,12 @@ const PlacePage = () => {
           {/* Booking Information */}
           <div className="p-4 sm:p-5 bg-white rounded-lg shadow-lg border border-gray-200">
             <h2 className="font-semibold text-lg sm:text-xl mb-3 sm:mb-4 text-gray-800">
-              Bronlash Ma'lumotlari:
+              Booking Information:
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               <div className="flex flex-col sm:flex-row justify-between">
                 <span className="font-medium text-gray-700 text-sm sm:text-base">
-                  Dars boshlanishi:
+                  Beginning of the lesson:
                 </span>
                 <span className="text-gray-900 text-sm sm:text-base">
                   {place.checkIn}
@@ -64,7 +64,7 @@ const PlacePage = () => {
               </div>
               <div className="flex flex-col sm:flex-row justify-between">
                 <span className="font-medium text-gray-700 text-sm sm:text-base">
-                  Dars tugashi:
+                  End of the lesson:
                 </span>
                 <span className="text-gray-900 text-sm sm:text-base">
                   {place.checkOut}
@@ -72,7 +72,7 @@ const PlacePage = () => {
               </div>
               <div className="flex flex-col sm:flex-row justify-between">
                 <span className="font-medium text-gray-700 text-sm sm:text-base">
-                  Maksimal talabalar:
+                  Maximum students:
                 </span>
                 <span className="text-gray-900 text-sm sm:text-base">
                   {place.maxGuests}
@@ -92,7 +92,7 @@ const PlacePage = () => {
       <div className="bg-white -mx-4 px-4 py-6 sm:-mx-8 sm:px-8 sm:py-8 border-t rounded-lg shadow-md">
         <div>
           <h2 className="font-semibold text-xl sm:text-2xl text-gray-800">
-            Qo'shimcha Ma'lumot
+            Additional Information
           </h2>
           <p className="mb-4 mt-2 text-sm sm:text-base text-gray-700 leading-relaxed">
             {place.extraInfo}
@@ -100,7 +100,7 @@ const PlacePage = () => {
         </div>
 
         <div className="mt-4">
-          <h3 className="font-semibold">O'qitish Darajalari:</h3>
+          <h3 className="font-semibold">Lessons Levels:</h3>
           <div className="flex flex-wrap gap-2 mt-2">
             {place.levels?.map((level) => (
               <span
@@ -116,7 +116,7 @@ const PlacePage = () => {
         {/* Perks */}
         <div>
           <h2 className="font-semibold text-xl sm:text-2xl text-gray-800 mt-4 sm:mt-6">
-            Ta'lim markazi qulayliklari:
+            Educational center facilities:
           </h2>
           <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 mt-3 sm:mt-4">
             {place.perks && place.perks.length > 0 ? (
@@ -130,7 +130,7 @@ const PlacePage = () => {
                 </div>
               ))
             ) : (
-              <p className="text-gray-500">Mavjud hech bonusi.</p>
+              <p className="text-gray-500">No bonuses available.</p>
             )}
           </div>
         </div>

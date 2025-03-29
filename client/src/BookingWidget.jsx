@@ -52,7 +52,7 @@ const BookingWidget = ({ place, isGalleryOpen }) => {
   return (
     <div className="bg-white shadow-xl rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 w-full max-w-[90vw] sm:max-w-2xl mx-auto">
       <div className="text-center text-xl sm:text-2xl lg:text-3xl text-gray-800 font-semibold mb-3 sm:mb-4">
-        Narxi: UZS {place.price} / dars uchun
+        Price: so'm {place.price} / per lesson
       </div>
 
       {!isGalleryOpen && (
@@ -60,7 +60,7 @@ const BookingWidget = ({ place, isGalleryOpen }) => {
           <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
             <div className="py-1 sm:py-2 flex-1">
               <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
-                Boshlanish:
+                Start:
               </label>
               <input
                 type="date"
@@ -71,7 +71,7 @@ const BookingWidget = ({ place, isGalleryOpen }) => {
             </div>
             <div className="py-1 sm:py-2 flex-1">
               <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
-                Tugash:
+                End:
               </label>
               <input
                 type="date"
@@ -86,7 +86,7 @@ const BookingWidget = ({ place, isGalleryOpen }) => {
 
       <div className="border-t border-gray-200 pt-3 sm:pt-4 mt-3 sm:mt-4">
         <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
-          Talabalar soni:
+          Maximum number of students:
         </label>
         <input
           type="number"
@@ -102,7 +102,7 @@ const BookingWidget = ({ place, isGalleryOpen }) => {
         {numberOfNights > 0 && (
           <div className="border-t border-gray-200 pt-3 sm:pt-4 mt-3 sm:mt-4">
             <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
-              To'liq Ismingiz:
+              Your Full Name:
             </label>
             <input
               type="text"
@@ -112,7 +112,7 @@ const BookingWidget = ({ place, isGalleryOpen }) => {
               className="w-full text-xs sm:text-sm border rounded-lg p-2 sm:p-3 focus:outline-none focus:ring-2 focus:ring-primary mb-3 sm:mb-4 shadow-sm"
             />
             <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
-              Telefon Raqamingiz:
+              Your Phone Number:
             </label>
             <input
               type="tel"
@@ -129,7 +129,7 @@ const BookingWidget = ({ place, isGalleryOpen }) => {
         onClick={bookThisPlace}
         className="mt-4 sm:mt-6 w-full bg-gradient-to-r from-primary to-primary-dark text-white py-2 sm:py-3 px-4 sm:px-6 rounded-full hover:from-primary-dark hover:to-primary transition-all duration-300 font-semibold text-sm sm:text-base shadow-md sm:shadow-lg"
       >
-        Sinov kurslariga yoziling
+        Sign up for tailor lessons
         {numberOfNights > 0 && (
           <span className="whitespace-nowrap">
             {" "}

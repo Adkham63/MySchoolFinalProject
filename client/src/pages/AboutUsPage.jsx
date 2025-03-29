@@ -74,11 +74,10 @@ const AboutUsPage = () => {
       {/* Hero Section */}
       <div className="text-center py-12 px-4">
         <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
-          Biz <span className="text-primary">haqimizda</span>
+          About <span className="text-primary">Us</span>
         </h1>
         <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-          My School Learning Centre - Ingliz tilini o'rganish uchun eng yaxshi
-          manba
+          My School Learning Centre-best for Learning English source
         </p>
       </div>
 
@@ -92,38 +91,36 @@ const AboutUsPage = () => {
 
         <div className="my-10 flex flex-col justify-center gap-6 md:w-2/4 text-base text-gray-600">
           <p>
-            Xush kelibsiz{" "}
+            Welcome To{" "}
             <span className="text-primary font-medium">
               My School Learning Centre
             </span>
-            , Ingliz tilidagi maqsadlaringizga erishishda sodiq hamkoringiz.
-            "Mening maktabim"da biz o'quvchilarning topishda qanday
-            qiyinchiliklarga duch kelishini tushunamiz to'g'ri manbalar,
-            tajribali o'qituvchilar bilan bog'lanish va ularning ta'lim yo'lida
-            izchil taraqqiyotni saqlab qolish.
+            is your faithful partner in achieving your goals in English. How do
+            we find students in"my school" we understand that difficulties are
+            faced with the right sources, contact experienced teachers and on
+            the way to their education maintain consistent progress.
           </p>
           <p>
-            <span className="text-primary font-medium">My School</span>{" "}
-            hisoblanadi ingliz tili ta'limida mukammallikka intiladi. Biz doimo
-            ishlaymiz platformangizni takomillashtirish, innovatsion usullarni
-            birlashtirish o'rganish tajribasi va yuqori darajadagi ta'lim
-            yordamini taqdim etadi. Ingliz tilida birinchi qadamlaringizni
-            tashlayapsizmi yoki tayyorgarlik ko'ryapsizmi IELTS,{" "}
-            <span className="text-primary font-medium">My School</span> shu
-            yerda sizga yo'lning har bir qadamini yo'naltirish uchun.
+            <span className="text-primary font-medium">My School</span> is the
+            English language that seeks excellence in education. We are always
+            we work to improve your platform, innovation methods combining
+            learning experience and advanced education provides assistance. Take
+            your first steps in English are you throwing or preparing for IELTS,{" "}
+            <span className="text-primary font-medium">My School</span> shu on
+            the ground to guide you every step of the way.
           </p>
           <h3 className="text-xl font-semibold text-gray-800 mt-4">
-            Bizning Vizyonimiz
+            Our Vision
           </h3>
           <p>
-            Bizning fikrimiz{" "}
+            Our opinion{" "}
             <span className="text-primary font-medium">
               My School Learning Centre
             </span>{" "}
-            har bir talaba uchun dinamik va qo'llab-quvvatlovchi muhit
-            yaratishdir. Biz o'quvchilarni ajoyib o'qituvchilar bilan bog'lashni
-            maqsad qilganmiz maqsadlaringizga erishishingiz va ingliz tilida
-            muvaffaqiyat qozonishingiz osonroq til sayohati.
+            is a dynamic and supportive environment for every student is
+            creation. We connect students with wonderful teachers we aim to
+            achieve your goals and in English it's easier for you to succeed
+            language journey.
           </p>
         </div>
       </div>
@@ -132,11 +129,10 @@ const AboutUsPage = () => {
       <div className="py-16 bg-white">
         <div className="max-w-6xl mx-auto px-4">
           <h2 className="text-2xl md:text-3xl font-bold text-center text-gray-800 mb-4">
-            Bizning <span className="text-primary">Kurslarimiz</span>
+            Our <span className="text-primary">courses</span>
           </h2>
           <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
-            Har qanday daraja va ehtiyojlar uchun mo'ljallangan professional
-            kurslar
+            Professional designed for any level and needs courses
           </p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {courses.map((course) => (
@@ -178,37 +174,37 @@ const AboutUsPage = () => {
       <div className="bg-primary/10 py-12">
         <div className="max-w-6xl mx-auto px-4">
           <h2 className="text-2xl md:text-3xl font-bold text-center text-gray-800 mb-12">
-            Nega <span className="text-primary">Bizni Tanlashadi?</span>
+            Why <span className="text-primary">Choose Us?</span>
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
               <div className="flex items-center mb-4">
                 <FaCheckCircle className="text-primary text-xl mr-2" />
-                <h3 className="text-lg font-semibold">Samaradorlik</h3>
+                <h3 className="text-lg font-semibold">Efficiency</h3>
               </div>
               <p className="text-gray-600">
-                Moslashtirilgan sinov darslarini ro'yxatdan o'tkazish va
-                rejalashtirish sizning band turmush tarzingizga.
+                Registration of adapted test classes and planning to your busy
+                lifestyle.
               </p>
             </div>
             <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
               <div className="flex items-center mb-4">
                 <FaCheckCircle className="text-primary text-xl mr-2" />
-                <h3 className="text-lg font-semibold">Qulaylik</h3>
+                <h3 className="text-lg font-semibold">Convenience</h3>
               </div>
               <p className="text-gray-600">
-                Tajribali ingliz tili o'qituvchilari tarmog'iga oson kirish
-                darajalar, boshlang'ichdan IELTSGACHA.
+                Easy access to the network of experienced English teachers
+                levels, from beginner to IELTS.
               </p>
             </div>
             <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
               <div className="flex items-center mb-4">
                 <FaCheckCircle className="text-primary text-xl mr-2" />
-                <h3 className="text-lg font-semibold">Shaxsiylashtirish</h3>
+                <h3 className="text-lg font-semibold">Personalization</h3>
               </div>
               <p className="text-gray-600">
-                Sizga erishishga yordam beradigan maxsus o'quv yo'llari va
-                ko'rsatmalar Ingliz tili maqsadlari samarali.
+                Special training paths to help you achieve and instructions
+                English goals are effective.
               </p>
             </div>
           </div>
@@ -218,11 +214,11 @@ const AboutUsPage = () => {
       {/* Our Teachers Section */}
       <div className="py-16 max-w-6xl mx-auto px-4">
         <h2 className="text-2xl md:text-3xl font-bold text-center text-gray-800 mb-4">
-          Bizning <span className="text-primary">O'qituvchilarimiz</span>
+          Our <span className="text-primary">Teachers</span>
         </h2>
         <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
-          Tajribali va o'z sohasining mutaxassislari bo'lgan o'qituvchilarimiz
-          sizga ingliz tilini o'rganishda yordam berishga tayyor.
+          Our teachers who are experienced and experts in their field ready to
+          help you learn English.
         </p>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {teachers.map((teacher) => (
@@ -252,10 +248,10 @@ const AboutUsPage = () => {
       <div className="bg-gray-100 py-16">
         <div className="max-w-6xl mx-auto px-4">
           <h2 className="text-2xl md:text-3xl font-bold text-center text-gray-800 mb-4">
-            O'quvchilarimizning <span className="text-primary">Fikrlari</span>
+            Our students <span className="text-primary">opinions</span>
           </h2>
           <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
-            Bizning o'quvchilarimiz My School haqida nima deyishadi
+            What do our students say about My School?
           </p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {reviews.map((review) => (
@@ -278,11 +274,11 @@ const AboutUsPage = () => {
       <div className="py-16 bg-primary text-white">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <h2 className="text-2xl md:text-3xl font-bold mb-6">
-            Ingliz tilini o'rganishga tayyormisiz?
+            Are you ready to learn English?
           </h2>
           <p className="text-lg mb-8">
-            Hoziroq ro'yxatdan o'ting va bizning tajribali o'qituvchilarimiz
-            bilan birinchi darsingizni boshlang!
+            Sign up now and our experienced teachers start your first lesson
+            with!
           </p>
           <button
             onClick={() =>
@@ -290,7 +286,7 @@ const AboutUsPage = () => {
             }
             className="bg-white text-primary px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors duration-300"
           >
-            Ro'yxatdan O'tish
+            Register
           </button>
         </div>
       </div>
