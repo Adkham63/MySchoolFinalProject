@@ -44,4 +44,13 @@
 - **Backend:** Node.js, Express
 - **Database:** MongoDB, AWS S3 storage
 
+
+## 🔑 Пароли | Passwords
+- **name:** Kim Pavel
+- **email:** kim.doe@example.com
+- **password:** securepassword123
+
+- **ADMIN_EMAIL** admin@example.com
+- **ADMIN_PASSWORD** StrongPassword123!
+
 ---

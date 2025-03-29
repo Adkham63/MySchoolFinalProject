@@ -1,7 +1,17 @@
 const mongoose = require("mongoose");
 
 const placeSchema = new mongoose.Schema({
-  owner: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+  owner: {
+    type: mongoose.Schema.Types.Mixed,
+    required: true,
+    // Добавляем кастомную валидацию
+    validate: {
+      validator: function (v) {
+        return typeof v === "string" || mongoose.Types.ObjectId.isValid(v);
+      },
+      message: (props) => `${props.value} is not a valid owner ID!`,
+    },
+  },
   title: { type: String, required: true },
   address: { type: String, required: true },
   addedPhotos: [String],

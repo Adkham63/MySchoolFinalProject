@@ -27,14 +27,33 @@ const bucket = "myschoollc";
 app.use(express.json());
 
 app.use(cookieParser()); //cookieParser
-app.use(cors({ credentials: true, origin: "http://localhost:5173" }));
+app.use(
+  cors({
+    credentials: true,
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 function getUserDataFromReq(req) {
   return new Promise((resolve, reject) => {
     jwt.verify(req.cookies.token, jwtSecret, {}, async (err, userData) => {
-      if (err) throw err;
-      resolve(userData);
+      if (err) return reject(err);
+
+      if (userData.id === "admin") {
+        return resolve({
+          id: "admin",
+          email: process.env.VITE_ADMIN_EMAIL,
+          role: "admin",
+          name: process.env.ADMIN_NAME || "Admin",
+        });
+      }
+
+      const user = await User.findById(userData.id);
+      if (!user) return reject("User not found");
+      resolve(user);
     });
   });
 }
@@ -64,6 +83,12 @@ async function uploadToS3(path, originalFileName, mimetype) {
   return `https://${bucket}.s3.amazonaws.com/${newFilename}`;
 }
 
+// Connect to MongoDB once at startup
+mongoose
+  .connect(process.env.MONGO_URL)
+  .then(() => console.log("MongoDB connected"))
+  .catch((err) => console.error("MongoDB connection error:", err));
+
 // Test route
 app.get("/test", (req, res) => {
   // Connect to MongoDB (Only need this once)
@@ -73,8 +98,6 @@ app.get("/test", (req, res) => {
 
 // Registration route
 app.post("/api/register", async (req, res) => {
-  // Connect to MongoDB (Only need this once)
-  mongoose.connect(process.env.MONGO_URL);
   const { name, email, password } = req.body;
   try {
     const userDoc = await User.create({
@@ -88,13 +111,48 @@ app.post("/api/register", async (req, res) => {
   }
 });
 
-// Login route
+// Update login routes
 app.post("/api/login", async (req, res) => {
-  // Connect to MongoDB (Only need this once)
-  mongoose.connect(process.env.MONGO_URL);
   const { email, password } = req.body;
-  const userDoc = await User.findOne({ email });
 
+  // Admin login
+  if (
+    email === process.env.VITE_ADMIN_EMAIL &&
+    password === process.env.VITE_ADMIN_PASSWORD
+  ) {
+    const adminUser = {
+      id: "admin",
+      name: process.env.ADMIN_NAME || "Admin",
+      email: process.env.VITE_ADMIN_EMAIL,
+      role: "admin",
+    };
+
+    jwt.sign(
+      { email: adminUser.email, id: adminUser.id, role: "admin" },
+      jwtSecret,
+      {},
+      (err, token) => {
+        if (err) {
+          console.log("JWT error:", err);
+          return res.status(500).json("JWT error");
+        }
+        res
+          .cookie("token", token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "lax",
+            maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
+            path: "/",
+            domain: "localhost", // Add this for local development
+          })
+          .json(adminUser);
+      }
+    );
+    return;
+  }
+
+  // Regular user login
+  const userDoc = await User.findOne({ email });
   if (userDoc) {
     const passOk = bcrypt.compareSync(password, userDoc.password);
     if (passOk) {
@@ -111,6 +169,10 @@ app.post("/api/login", async (req, res) => {
             .cookie("token", token, {
               httpOnly: true,
               secure: process.env.NODE_ENV === "production",
+              sameSite: "lax",
+              maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
+              path: "/",
+              domain: "localhost", // Add this for local development
             })
             .json(userDoc);
         }
@@ -123,18 +185,41 @@ app.post("/api/login", async (req, res) => {
   }
 });
 
-app.get("/api/profile", (req, res) => {
-  // Connect to MongoDB (Only need this once)
-  mongoose.connect(process.env.MONGO_URL);
+// Profile route (returns admin data if token corresponds to admin)
+app.get("/api/profile", async (req, res) => {
   const { token } = req.cookies;
-  if (token) {
-    jwt.verify(token, jwtSecret, {}, async (err, userData) => {
-      if (err) throw err;
-      const { name, email, _id } = await User.findById(userData.id);
-      res.json({ name, email, _id });
+  if (!token) {
+    return res.json(null); // Explicit 401 for no token
+  }
+
+  try {
+    const userData = jwt.verify(token, jwtSecret);
+    console.log("Decoded user data:", userData);
+
+    // Check for admin first
+    if (userData.email === process.env.VITE_ADMIN_EMAIL) {
+      return res.json({
+        id: "admin",
+        name: process.env.ADMIN_NAME || "Admin",
+        email: process.env.VITE_ADMIN_EMAIL,
+        role: "admin",
+      });
+    }
+
+    // Regular user lookup
+    const user = await User.findOne({ email: userData.email });
+    if (!user) return res.status(404).json(null);
+
+    res.json({
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      role: "user",
     });
-  } else {
-    res.json(null);
+  } catch (err) {
+    console.error("Profile error:", err);
+    res.clearCookie("token");
+    res.status(401).json(null);
   }
 });
 
@@ -142,24 +227,17 @@ app.post("/logout", (req, res) => {
   res.cookie("token", "").json(true);
 });
 
+// Upload-by-link route
 app.post("/api/upload-by-link", async (req, res) => {
   const { link } = req.body;
   const newName = "photo" + Date.now() + ".jpg";
-  const filePath = path.join("/tmp", newName); // Corrected file path
-
+  const filePath = path.join("/tmp", newName);
   try {
-    // Download the image
-    await imageDownloader.image({
-      url: link,
-      dest: filePath,
-    });
-
-    // Upload to S3
-    const mimeType = mime.lookup(filePath); // Correct MIME type lookup
-    const url = await uploadToS3(filePath, newName, mimeType); // Corrected function call
-
+    await imageDownloader.image({ url: link, dest: filePath });
+    const mimeType = mime.lookup(filePath);
+    const url = await uploadToS3(filePath, newName, mimeType);
     console.log("Image downloaded and saved:", filePath);
-    res.json(url); // Send back the S3 URL
+    res.json(url);
   } catch (err) {
     console.error("Error downloading image:", err);
     res.status(500).json({
@@ -169,7 +247,8 @@ app.post("/api/upload-by-link", async (req, res) => {
   }
 });
 
-const photosMiddleware = multer({ dest: "/tmp" }); // Fix path
+// Upload via file route
+const photosMiddleware = multer({ dest: "/tmp" });
 app.post(
   "/api/upload",
   photosMiddleware.array("photos", 100),
@@ -177,106 +256,136 @@ app.post(
     const uploadedFiles = [];
     for (let i = 0; i < req.files.length; i++) {
       const { path: filePath, originalname, mimetype } = req.files[i];
-      // const ext = path.extname(originalname); // Use path.extname to get file extension
-      // const newPath = path.join(__dirname, "uploads", `${Date.now()}${ext}`); // Ensure correct path
-      // fs.renameSync(filePath, newPath);
-      // uploadedFiles.push(`/uploads/${path.basename(newPath)}`); // Fix path to be accessible via URL
       const url = await uploadToS3(filePath, originalname, mimetype);
       uploadedFiles.push(url);
     }
-    res.json(uploadedFiles); // Send the corrected paths
+    res.json(uploadedFiles);
   }
 );
 
-// Place Creation
-app.post("/api/places", (req, res) => {
-  mongoose.connect(process.env.MONGO_URL);
+// Place Creation route
+app.post("/api/places", async (req, res) => {
   const { token } = req.cookies;
-  const {
-    title,
-    address,
-    addedPhotos,
-    description,
-    perks,
-    extraInfo,
-    checkIn,
-    checkOut,
-    maxGuests,
-    price,
-    levels, // Make sure this is extracted from req.body
-  } = req.body;
+  if (!token) return res.status(401).json({ error: "Unauthorized" });
 
-  if (!token) return res.status(401).json("Unauthorized");
+  try {
+    const userData = jwt.verify(token, jwtSecret);
 
-  // Add validation HERE
-  if (!levels || levels.length === 0) {
-    return res
-      .status(400)
-      .json({ error: "At least one level must be selected" });
-  }
+    // Validate required fields
+    const requiredFields = [
+      "title",
+      "address",
+      "description",
+      "levels",
+      "checkIn",
+      "checkOut",
+      "maxGuests",
+      "price",
+    ];
+    const missingFields = requiredFields.filter((field) => !req.body[field]);
 
-  jwt.verify(token, jwtSecret, {}, async (err, userData) => {
-    if (err) return res.status(403).json("Invalid token");
-
-    try {
-      const placeDoc = await Place.create({
-        owner: userData.id,
-        price,
-        title,
-        address,
-        addedPhotos,
-        description,
-        perks,
-        extraInfo,
-        checkIn,
-        checkOut,
-        maxGuests,
-        levels,
+    if (missingFields.length > 0) {
+      return res.status(400).json({
+        error: "Missing required fields",
+        missingFields,
       });
-      res.json(placeDoc);
-    } catch (err) {
-      res
-        .status(500)
-        .json({ error: "Failed to create place", details: err.message });
     }
-  });
+
+    const placeData = {
+      ...req.body,
+      owner: userData.id, // Add owner from token
+      price: Number(req.body.price),
+      maxGuests: Number(req.body.maxGuests),
+    };
+
+    const placeDoc = await Place.create(placeData);
+    res.status(201).json(placeDoc);
+  } catch (err) {
+    console.error("Error creating place:", err);
+    res.status(500).json({
+      error: "Failed to create place",
+      details: err.message,
+    });
+  }
 });
-
-// Fetch User's Places
+// Fetch User's Places route
 app.get("/api/user-places", async (req, res) => {
-  // Connect to MongoDB (Only need this once)
-  mongoose.connect(process.env.MONGO_URL);
   const { token } = req.cookies;
-
   if (!token) return res.status(401).json("Unauthorized");
 
   try {
-    // Verify JWT token
     const userData = jwt.verify(token, jwtSecret);
+    const { page = 1, limit = 10 } = req.query;
+    const skip = (page - 1) * limit;
 
-    // Fetch places owned by the user
-    const places = await Place.find({ owner: userData.id });
+    let query = {};
+    let places, total;
 
-    // Respond with the places
-    res.json(places);
+    // For admin - get all places with owner info
+    if (userData.id === "admin" || userData.role === "admin") {
+      [places, total] = await Promise.all([
+        Place.find().skip(skip).limit(limit).lean(),
+        Place.countDocuments(),
+      ]);
+
+      const userIds = places
+        .filter((place) => place.owner !== "admin")
+        .map((place) => place.owner);
+
+      const owners = await User.find({ _id: { $in: userIds } }).select(
+        "name email"
+      );
+      const ownerMap = owners.reduce((acc, user) => {
+        acc[user._id.toString()] = user;
+        return acc;
+      }, {});
+
+      places = places.map((place) => ({
+        ...place,
+        ownerInfo:
+          place.owner === "admin"
+            ? {
+                id: "admin",
+                name: process.env.ADMIN_NAME || "Admin",
+                email: process.env.VITE_ADMIN_EMAIL,
+              }
+            : ownerMap[place.owner.toString()] || {
+                name: "Unknown",
+                email: "",
+              },
+      }));
+    } else {
+      // For regular users - only their places
+      [places, total] = await Promise.all([
+        Place.find({ owner: userData.id }).skip(skip).limit(limit),
+        Place.countDocuments({ owner: userData.id }),
+      ]);
+    }
+
+    res.json({
+      success: true,
+      places,
+      totalPages: Math.ceil(total / limit),
+      currentPage: parseInt(page),
+    });
   } catch (err) {
-    console.error(err);
-    res
-      .status(500)
-      .json({ error: "Failed to fetch places", details: err.message });
+    console.error("Error:", err);
+    res.status(500).json({
+      success: false,
+      error: "Server error",
+    });
   }
 });
 
+// Get Place by ID route
 app.get("/api/places/:id", async (req, res) => {
-  // Connect to MongoDB (Only need this once)
-  mongoose.connect(process.env.MONGO_URL);
   const { id } = req.params;
-  res.json(await Place.findById(id));
+  const place = await Place.findById(id);
+  res.json(place);
 });
 
+// Update Place route
 app.put("/api/places/:id", async (req, res) => {
-  // Connect to MongoDB (Only need this once)
-  mongoose.connect(process.env.MONGO_URL);
   const { token } = req.cookies;
   const {
     title,
@@ -291,31 +400,17 @@ app.put("/api/places/:id", async (req, res) => {
     price,
     levels,
   } = req.body;
-
-  if (!token) {
-    return res.status(401).json("Unauthorized: No token provided");
-  }
+  if (!token) return res.status(401).json("Unauthorized: No token provided");
 
   try {
-    // Verify the JWT token
     const userData = jwt.verify(token, jwtSecret);
-
-    // Use req.params.id to get the place ID from the URL
-    const placeDoc = await Place.findById(req.params.id); // Correct way to access the 'id'
-
-    // Check if the place exists
-    if (!placeDoc) {
-      return res.status(404).json("Place not found");
-    }
-
-    // Check if the logged-in user is the owner of the place
-    if (userData.id !== placeDoc.owner.toString()) {
+    const placeDoc = await Place.findById(req.params.id);
+    if (!placeDoc) return res.status(404).json("Place not found");
+    if (userData.id !== placeDoc.owner.toString())
       return res
         .status(403)
         .json("Unauthorized: You are not the owner of this place");
-    }
 
-    // Update the place with the new data
     placeDoc.set({
       title,
       address,
@@ -329,40 +424,28 @@ app.put("/api/places/:id", async (req, res) => {
       price,
       levels,
     });
-
-    // Save the updated place
     await placeDoc.save();
-
-    // Send a success response
     res.json("Place updated successfully");
   } catch (err) {
-    // Handle errors (invalid token, database errors, etc.)
     console.error(err);
     res.status(500).json({ error: "Server error", details: err.message });
   }
 });
 
+// Get all Places route
 app.get("/api/places", async (req, res) => {
-  // Connect to MongoDB (Only need this once)
-  mongoose.connect(process.env.MONGO_URL);
-  res.json(await Place.find());
+  const places = await Place.find();
+  res.json(places);
 });
 
+// Booking routes
 app.post("/api/booking", async (req, res) => {
-  // Connect to MongoDB (Only need this once)
-  mongoose.connect(process.env.MONGO_URL);
   const { token } = req.cookies;
-
-  if (!token) {
-    return res.status(401).json("Unauthorized: No token provided");
-  }
-
+  if (!token) return res.status(401).json("Unauthorized: No token provided");
   try {
     const userData = await getUserDataFromReq(req);
     const { place, checkIn, checkOut, numberOfGuests, name, phone, price } =
       req.body;
-
-    // Create a new booking
     const booking = await Booking.create({
       place,
       checkIn,
@@ -373,8 +456,6 @@ app.post("/api/booking", async (req, res) => {
       price,
       user: userData.id,
     });
-
-    // Respond with the newly created booking
     res.status(201).json(booking);
   } catch (err) {
     console.error("Error creating booking:", err);
@@ -385,20 +466,53 @@ app.post("/api/booking", async (req, res) => {
 });
 
 app.get("/api/bookings", async (req, res) => {
-  // Connect to MongoDB (Only need this once)
-  mongoose.connect(process.env.MONGO_URL);
-  const userData = await getUserDataFromReq(req);
-
   try {
-    const bookings = await Booking.find({ user: userData.id }).populate(
-      "place"
-    );
+    const userData = await getUserDataFromReq(req);
+
+    let bookings;
+    if (userData.id === "admin") {
+      // Для администратора: все бронирования с данными пользователя и места
+      bookings = await Booking.find()
+        .populate("place")
+        .populate("user", "name email");
+    } else {
+      // Для обычных пользователей: только их бронирования
+      bookings = await Booking.find({ user: userData.id }).populate("place");
+    }
+
     res.json(bookings);
   } catch (err) {
     console.error("Error fetching bookings:", err);
-    res
-      .status(500)
-      .json({ error: "Failed to fetch bookings", details: err.message });
+    res.status(500).json({
+      error: "Failed to fetch bookings",
+      details: err.message,
+    });
+  }
+});
+
+app.delete("/api/bookings/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const deletedBooking = await Booking.findByIdAndDelete(id);
+    if (!deletedBooking)
+      return res.status(404).json({ message: "Booking not found" });
+    res.status(200).json({ message: "Booking successfully canceled" });
+  } catch (error) {
+    console.error("Error canceling booking:", error);
+    res.status(500).json({ message: "Failed to cancel booking" });
+  }
+});
+
+// Delete Place and its related bookings
+app.delete("/api/places/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    await Booking.deleteMany({ place: id });
+    await Place.findByIdAndDelete(id);
+    res.status(200).send("Place and related bookings deleted successfully");
+  } catch (error) {
+    console.error("Error deleting place and bookings:", error);
+    res.status(500).send("Server error");
   }
 });
 

@@ -5,7 +5,6 @@ import PlaceImg from "../PlaceImg";
 import { Link, useNavigate } from "react-router-dom";
 import BookingDates from "../BookingDates";
 
-// Enhanced Modal component
 const AlertModal = ({ message, onClose, type }) => {
   return (
     <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex justify-center items-center z-50 animate-fade-in">
@@ -51,7 +50,7 @@ const AlertModal = ({ message, onClose, type }) => {
               type === "success" ? "text-green-600" : "text-red-600"
             }`}
           >
-            {type === "success" ? "Muvaffaqiyat!" : "Oops!"}
+            {type === "success" ? "Muvaffaqiyat!" : "Xatolik!"}
           </h2>
           <p className="text-gray-600 mb-6 px-4">{message}</p>
           <button
@@ -68,13 +67,32 @@ const AlertModal = ({ message, onClose, type }) => {
 
 const BookingsPage = () => {
   const [bookings, setBookings] = useState([]);
+  const [userRole, setUserRole] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [alert, setAlert] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get("/api/bookings").then((response) => {
-      setBookings(response.data);
-    });
+    const fetchData = async () => {
+      try {
+        // Fetch user profile to get role
+        const profileResponse = await axios.get("/api/profile");
+        setUserRole(profileResponse.data?.role || "user");
+
+        // Fetch bookings
+        const bookingsResponse = await axios.get("/api/bookings");
+        setBookings(bookingsResponse.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setAlert({
+          message: "Ma'lumotlarni yuklab bo'lmadi",
+          type: "error",
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
   }, []);
 
   const cancelBooking = async (bookingId) => {
@@ -84,14 +102,13 @@ const BookingsPage = () => {
         prev.filter((booking) => booking._id !== bookingId)
       );
       setAlert({
-        message: "Bronlash muvaffaqiyatli bekor qilindi!",
+        message: "Bandlov muvaffaqiyatli bekor qilindi!",
         type: "success",
       });
-      setTimeout(() => navigate("/account/bookings"), 2000);
     } catch (error) {
       console.error("Error canceling booking:", error);
       setAlert({
-        message: "Failed to cancel booking. Please try again.",
+        message: "Bekor qilishda xatolik yuz berdi",
         type: "error",
       });
     }
@@ -99,26 +116,57 @@ const BookingsPage = () => {
 
   const closeAlert = () => setAlert(null);
 
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-pulse text-2xl text-gray-600">
+          Yuklanmoqda...
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-indigo-50 to-white">
       <AccountNav />
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <h1 className="text-4xl font-bold text-indigo-900 mb-8 flex items-center gap-3">
-          <svg
-            className="w-8 h-8"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
-            ></path>
-          </svg>
-          Mening Rezervasyonlarim
+        <h1 className="text-3xl md:text-4xl font-bold text-indigo-900 mb-8 flex items-center gap-3">
+          {userRole === "admin" ? (
+            <>
+              <svg
+                className="w-8 h-8"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
+                />
+              </svg>
+              Barcha Bandlovlar
+            </>
+          ) : (
+            <>
+              <svg
+                className="w-8 h-8"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+                />
+              </svg>
+              Mening Bandlovlarim
+            </>
+          )}
         </h1>
 
         <div className="space-y-6">
@@ -137,15 +185,16 @@ const BookingsPage = () => {
                       strokeLinejoin="round"
                       strokeWidth="2"
                       d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                    ></path>
+                    />
                   </svg>
                 </div>
                 <h3 className="text-2xl font-semibold text-gray-700 mb-2">
-                  Hech Qanday Buyurtma Topilmadi
+                  Bandlovlar topilmadi
                 </h3>
                 <p className="text-gray-500">
-                  Siz hali hech qanday buyurtma bermaganga o'xshaysiz yoki
-                  o'qituvchi Profil o'chirildi.
+                  {userRole === "admin"
+                    ? "Hozircha hech qanday bandlov mavjud emas"
+                    : "Siz hali hech qanday bandlov qilmagansiz"}
                 </p>
               </div>
             </div>
@@ -155,48 +204,81 @@ const BookingsPage = () => {
                 key={booking._id}
                 className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden group"
               >
-                <Link to={`/account/bookings/${booking._id}`} className="block">
-                  <div className="flex flex-col sm:flex-row gap-6 p-6">
-                    <div className="w-full sm:w-48 h-48 relative overflow-hidden rounded-xl">
-                      <PlaceImg
-                        place={booking.place}
-                        className="w-full h-full object-cover transform group-hover:scale-105 transition duration-300"
-                      />
-                    </div>
-
-                    <div className="flex-1">
-                      <h2 className="text-2xl font-bold text-gray-800 mb-3">
-                        {booking.place?.title}
-                      </h2>
-
-                      <div className="text-xl">
-                        <BookingDates
-                          className="mb-2 mt-2 text-gray-500"
-                          booking={booking}
-                        />
-                        <div className="flex gap-1 items-center">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            strokeWidth={1.5}
-                            stroke="currentColor"
-                            className="w-8 h-8 text-indigo-600"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z"
-                            />
-                          </svg>
-                          <span className="text-2xl font-semibold">
-                            Umumiy narxi: so'm {booking.price}
-                          </span>
+                <div className="p-6">
+                  {userRole === "admin" && (
+                    <div className="mb-4 bg-blue-50 p-4 rounded-lg">
+                      <div className="flex items-center gap-3">
+                        <svg
+                          className="w-6 h-6 text-blue-600"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                          />
+                        </svg>
+                        <div>
+                          <h3 className="font-semibold text-blue-800">
+                            {booking.user?.name || "Foydalanuvchi"}
+                          </h3>
+                          <p className="text-sm text-blue-600">
+                            {booking.user?.email || "Email mavjud emas"}
+                          </p>
                         </div>
                       </div>
                     </div>
-                  </div>
-                </Link>
+                  )}
+
+                  <Link
+                    to={`/account/bookings/${booking._id}`}
+                    className="block"
+                  >
+                    <div className="flex flex-col sm:flex-row gap-6">
+                      <div className="w-full sm:w-48 h-48 relative overflow-hidden rounded-xl">
+                        <PlaceImg
+                          place={booking.place}
+                          className="w-full h-full object-cover transform group-hover:scale-105 transition duration-300"
+                        />
+                      </div>
+
+                      <div className="flex-1">
+                        <h2 className="text-2xl font-bold text-gray-800 mb-3">
+                          {booking.place?.title || "O'chirilgan profil"}
+                        </h2>
+
+                        <div className="text-xl space-y-2">
+                          <BookingDates
+                            className="text-gray-600"
+                            booking={booking}
+                          />
+                          <div className="flex gap-2 items-center">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="w-6 h-6 text-indigo-600"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M15 8.25H9m6 3a3 3 0 01-3 3H9.5a2.25 2.25 0 01-2.25-2.25V8.25M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                              />
+                            </svg>
+                            <span className="font-semibold">
+                              Umumiy narx: so'm {booking.price}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </Link>
+                </div>
 
                 <div className="border-t border-gray-100 px-6 py-4 bg-indigo-50/50">
                   {booking.place ? (
@@ -215,9 +297,9 @@ const BookingsPage = () => {
                           strokeLinejoin="round"
                           strokeWidth="2"
                           d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                        ></path>
+                        />
                       </svg>
-                      Rezervasyonni Bekor Qilish
+                      Bekor qilish
                     </button>
                   ) : (
                     <div className="text-red-500 font-semibold flex items-center gap-2">
@@ -232,9 +314,9 @@ const BookingsPage = () => {
                           strokeLinejoin="round"
                           strokeWidth="2"
                           d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-                        ></path>
+                        />
                       </svg>
-                      O'qituvchi Profili O'chirildi
+                      O'qituvchi profili o'chirilgan
                     </div>
                   )}
                 </div>

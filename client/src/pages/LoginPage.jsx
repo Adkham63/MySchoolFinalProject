@@ -14,12 +14,16 @@ const LoginPage = () => {
   async function handleLoginSubmit(ev) {
     ev.preventDefault();
     try {
-      const { data } = await axios.post("/api/login", { email, password });
+      const { data } = await axios.post(
+        "/api/login",
+        { email, password },
+        { withCredentials: true }
+      );
       setUser(data);
-      toast.success("Kirish muvaffaqiyatli"); // Show success notification
-      setTimeout(() => setRedirect(true), 1000); // Delay redirection by 2 seconds
+      toast.success("Login successful");
+      setTimeout(() => setRedirect(true), 1000);
     } catch (e) {
-      toast.error("Kirish muvaffaqiyatsiz tugadi"); // Show error notification
+      toast.error("Login failed");
     }
   }
 
@@ -30,30 +34,30 @@ const LoginPage = () => {
   return (
     <div className="h-screen flex items-center justify-center">
       <div className="mb-16">
-        <h1 className="text-4xl text-center mb-4">Kirish Sahifasi</h1>
+        <h1 className="text-4xl text-center mb-4">Login</h1>
         <form className="max-w-md mx-auto" onSubmit={handleLoginSubmit}>
           <input
             type="email"
-            placeholder="Sizning elektron pochtangiz"
+            placeholder="your@email.com"
             value={email}
             onChange={(ev) => setEmail(ev.target.value)}
           />
           <input
             type="password"
-            placeholder="Maxfiy so'z"
+            placeholder="password"
             value={password}
             onChange={(ev) => setPassword(ev.target.value)}
           />
-          <button className="primary">Kirish</button>
+          <button className="primary">Login</button>
           <div className="text-center py-2 text-gray-500">
-            Hali hisobingiz yo'qmi?{" "}
+            Don't have an account yet?{" "}
             <Link className="underline text-black" to={"/register"}>
-              Hozir ro'yxatdan o'ting
+              Register now
             </Link>
           </div>
         </form>
       </div>
-      <ToastContainer /> {/* Container for toast notifications */}
+      <ToastContainer />
     </div>
   );
 };

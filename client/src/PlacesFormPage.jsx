@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Navigate, useParams } from "react-router-dom";
+import { Navigate, useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Swal from "sweetalert2";
 import Perks from "./Perks.jsx";
@@ -9,229 +9,322 @@ import LevelsSelector from "./LevelsSelector.jsx";
 
 const PlacesFormPage = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [address, setAddress] = useState("");
   const [description, setDescription] = useState("");
-  const [perks, setPerks] = useState([]);
+  const [selectedPerks, setSelectedPerks] = useState([]);
   const [extraInfo, setExtraInfo] = useState("");
   const [checkIn, setCheckIn] = useState("");
   const [checkOut, setCheckOut] = useState("");
   const [maxGuests, setMaxGuests] = useState(10);
   const [price, setPrice] = useState(74000);
   const [addedPhotos, setAddedPhotos] = useState([]);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [redirect, setRedirect] = useState(false);
-  const [levels, setLevels] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [selectedLevels, setSelectedLevels] = useState([]);
 
   useEffect(() => {
     if (!id) return;
 
+    setLoading(true);
     axios
       .get(`/api/places/${id}`)
       .then((response) => {
         const { data } = response;
         setTitle(data.title);
         setAddress(data.address);
-        setAddedPhotos((prev) => {
-          const uniquePhotos = [
-            ...new Set([...prev, ...(data.addedPhotos || [])]),
-          ];
-          return uniquePhotos;
-        });
+        setAddedPhotos(data.addedPhotos || []);
         setDescription(data.description);
-        setPerks(data.perks);
-        setExtraInfo(data.extraInfo);
+        setSelectedPerks(data.perks || []);
+        setExtraInfo(data.extraInfo || "");
         setCheckIn(data.checkIn);
         setCheckOut(data.checkOut);
         setMaxGuests(data.maxGuests);
         setPrice(data.price);
-        setLevels(data.levels || []);
+        setSelectedLevels(data.levels || []);
       })
       .catch((error) => {
         console.error("Error fetching place details:", error);
-      });
+        setError("Failed to load teacher profile");
+      })
+      .finally(() => setLoading(false));
   }, [id]);
 
-  const savePlace = async (ev) => {
-    ev.preventDefault();
-
-    const placeData = {
-      title,
-      address,
-      addedPhotos: [...new Set(addedPhotos)],
-      description,
-      perks,
-      extraInfo,
-      checkIn,
-      checkOut,
-      maxGuests,
-      price,
-      levels,
-    };
+  const savePlace = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
 
     try {
-      if (id) {
-        await axios.put(`/api/places/${id}`, placeData);
-      } else {
-        await axios.post("/api/places", placeData);
+      // First get the user data
+      const userResponse = await axios.get("/api/profile");
+      const userData = userResponse.data;
+
+      if (!userData || !userData.id) {
+        throw new Error("User information not available");
       }
-      setRedirect(true);
-    } catch (error) {
-      console.error("Error saving place:", error);
+
+      // Prepare the place data with owner
+      const placeData = {
+        title,
+        address,
+        addedPhotos,
+        description,
+        perks: selectedPerks,
+        extraInfo,
+        checkIn,
+        checkOut,
+        maxGuests: Number(maxGuests),
+        price: Number(price),
+        levels: selectedLevels,
+        owner: userData.id, // Include the owner field
+      };
+
+      // Validate required fields
+      const requiredFields = {
+        title: "Teacher name is required",
+        address: "Short description is required",
+        description: "Detailed description is required",
+        checkIn: "Lesson start time is required",
+        checkOut: "Lesson end time is required",
+        maxGuests: "Maximum students is required",
+        price: "Price per lesson is required",
+      };
+
+      const missingFields = Object.entries(requiredFields)
+        .filter(([field]) => !placeData[field])
+        .map(([_, message]) => message);
+
+      if (missingFields.length > 0) {
+        throw new Error(missingFields.join("\n"));
+      }
+
+      if (!selectedLevels || selectedLevels.length === 0) {
+        throw new Error("Please select at least one teaching level");
+      }
+
+      if (id) {
+        // Update existing place
+        await axios.put(`/api/places/${id}`, placeData);
+        Swal.fire({
+          icon: "success",
+          title: "Success!",
+          text: "Teacher profile updated successfully",
+          timer: 2000,
+        });
+      } else {
+        // Create new place
+        await axios.post("/api/places", placeData);
+        Swal.fire({
+          icon: "success",
+          title: "Success!",
+          text: "Teacher profile created successfully",
+          timer: 2000,
+        });
+      }
+
+      navigate("/account/places");
+    } catch (err) {
+      console.error("Error saving place:", err);
+      const errorMessage =
+        err.response?.data?.error ||
+        err.response?.data?.message ||
+        err.message ||
+        "Failed to save teacher profile";
+
+      setError(errorMessage);
+
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: errorMessage,
+      });
+    } finally {
+      setLoading(false);
     }
   };
 
   const deletePlace = async () => {
-    Swal.fire({
-      title: "Ishonchingiz komilmi?",
-      text: "Bu o'qituvchining profilini va tegishli buyurtmalarni butunlay o'chirib tashlaydi.",
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "This will permanently delete the teacher profile and related bookings!",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#d33",
       cancelButtonColor: "#3085d6",
-      confirmButtonText: "Ha, uni o'chiring!",
-      cancelButtonText: "Bekor qilish",
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        try {
-          await axios.delete(`/api/places/${id}`);
-          Swal.fire(
-            "O'chirildi!",
-            "O'qituvchining profili o'chirildi.",
-            "muvaffaqiyat"
-          );
-          setRedirect(true);
-        } catch (error) {
-          console.error("Error deleting place:", error);
-          Swal.fire(
-            "Error!",
-            "Failed to delete the teacher's profile.",
-            "error"
-          );
-        }
-      }
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "Cancel",
     });
+
+    if (result.isConfirmed) {
+      try {
+        setLoading(true);
+        await axios.delete(`/api/places/${id}`);
+        await Swal.fire({
+          icon: "success",
+          title: "Deleted!",
+          text: "Teacher profile has been deleted.",
+          timer: 2000,
+        });
+        navigate("/account/places");
+      } catch (error) {
+        console.error("Error deleting place:", error);
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Failed to delete teacher profile",
+        });
+      } finally {
+        setLoading(false);
+      }
+    }
   };
 
-  if (redirect) {
-    return <Navigate to="/account/places" />;
+  if (loading && !id) {
+    return (
+      <div className="text-center py-8">
+        <div className="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-primary"></div>
+        <p className="mt-2 text-gray-600">Loading...</p>
+      </div>
+    );
   }
 
   return (
     <div>
       <AccountNav />
       <form onSubmit={savePlace}>
-        <h2 className="text-2xl mt-4">O'qituvchining to'liq ismi:</h2>
+        {error && (
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+            {error.split("\n").map((line, i) => (
+              <p key={i}>{line}</p>
+            ))}
+          </div>
+        )}
+
+        <h2 className="text-2xl mt-4">Teacher's Full Name:</h2>
         <input
+          type="text"
           value={title}
-          onChange={(ev) => setTitle(ev.target.value)}
-          type="text"
-          placeholder="e.g. Rasulova Laylo"
+          onChange={(e) => setTitle(e.target.value)}
+          placeholder="e.g., John Smith"
+          className="border p-2 w-full rounded"
+          required
         />
-        <h2 className="text-2xl mt-4">Qisqa tavsif yoki iqtibos:</h2>
+
+        <h2 className="text-2xl mt-4">Short Description or Quote:</h2>
         <input
-          value={address}
-          onChange={(ev) => setAddress(ev.target.value)}
           type="text"
+          value={address}
+          onChange={(e) => setAddress(e.target.value)}
           placeholder="Unlock the World of English: Book a Lesson with a Professional!"
-          className="border p-2 w-full"
+          className="border p-2 w-full rounded"
+          required
         />
 
-        <div className="text-justify mt-4">
-          {address.split("\n").map(
-            (paragraph, index) =>
-              paragraph.trim() && (
-                <p key={index} className="mb-2">
-                  {paragraph}
-                </p>
-              )
-          )}
-        </div>
-
-        <h2 className="text-2xl mt-4">O'qituvchining Profil fotosurati:</h2>
+        <h2 className="text-2xl mt-4">Teacher's Profile Photo:</h2>
         <PhotosUploader addedPhotos={addedPhotos} onChange={setAddedPhotos} />
 
-        <div>
-          <h2 className="text-2xl mt-4">Tavsif:</h2>
-          <textarea
-            value={description}
-            onChange={(ev) => setDescription(ev.target.value)}
-          />
-        </div>
+        <h2 className="text-2xl mt-4">Detailed Description:</h2>
+        <textarea
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          className="border p-2 w-full rounded"
+          rows="6"
+          required
+        />
 
-        <h2 className="text-2xl mt-4">O'qituvchi darajalari:</h2>
-        <LevelsSelector selected={levels} onChange={setLevels} />
+        <h2 className="text-2xl mt-4">Teaching Levels:</h2>
+        <LevelsSelector
+          selected={selectedLevels}
+          onChange={setSelectedLevels}
+        />
 
-        <div>
-          <h2 className="text-2xl mt-4 mb-4">
-            Guruhga taqdim etiladigan xizmatlar:
-          </h2>
-          <Perks selected={perks} onChange={setPerks} />
-        </div>
+        <h2 className="text-2xl mt-4">Services Offered:</h2>
+        <Perks selected={selectedPerks} onChange={setSelectedPerks} />
 
-        <div>
-          <h2 className="text-2xl mt-4">Qo'shimcha Ma'lumot</h2>
-          <textarea
-            value={extraInfo}
-            onChange={(ev) => setExtraInfo(ev.target.value)}
-          />
-        </div>
+        <h2 className="text-2xl mt-4">Additional Information:</h2>
+        <textarea
+          value={extraInfo}
+          onChange={(e) => setExtraInfo(e.target.value)}
+          className="border p-2 w-full rounded"
+          rows="4"
+        />
 
-        <div>
-          <h2 className="text-2xl mt-4 mb-4">Dars haqida ma'lumot:</h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-            <div>
-              <h3>Darsning boshlanish vaqti</h3>
-              <input
-                value={checkIn}
-                onChange={(ev) => setCheckIn(ev.target.value)}
-                type="text"
-                placeholder="e.g. 14:00"
-              />
-            </div>
-            <div>
-              <h3>Dars tugash vaqti</h3>
-              <input
-                value={checkOut}
-                onChange={(ev) => setCheckOut(ev.target.value)}
-                type="text"
-                placeholder="e.g. 11:00"
-              />
-            </div>
-            <div>
-              <h3>Maksimal talabalar:</h3>
-              <input
-                value={maxGuests}
-                onChange={(ev) => setMaxGuests(ev.target.value)}
-                type="number"
-              />
-            </div>
-            <div>
-              <h3>Bir dars narxi:</h3>
-              <input
-                value={price}
-                onChange={(ev) => setPrice(ev.target.value)}
-                type="number"
-              />
-            </div>
+        <h2 className="text-2xl mt-4">Lesson Information:</h2>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-2">
+          <div>
+            <h3>Lesson Start Time</h3>
+            <input
+              type="text"
+              value={checkIn}
+              onChange={(e) => setCheckIn(e.target.value)}
+              placeholder="e.g., 14:00"
+              className="border p-2 w-full rounded"
+              required
+            />
+          </div>
+          <div>
+            <h3>Lesson End Time</h3>
+            <input
+              type="text"
+              value={checkOut}
+              onChange={(e) => setCheckOut(e.target.value)}
+              placeholder="e.g., 15:00"
+              className="border p-2 w-full rounded"
+              required
+            />
+          </div>
+          <div>
+            <h3>Max Students:</h3>
+            <input
+              type="number"
+              value={maxGuests}
+              onChange={(e) => setMaxGuests(e.target.value)}
+              min="1"
+              className="border p-2 w-full rounded"
+              required
+            />
+          </div>
+          <div>
+            <h3>Price per Lesson:</h3>
+            <input
+              type="number"
+              value={price}
+              onChange={(e) => setPrice(e.target.value)}
+              min="0"
+              className="border p-2 w-full rounded"
+              required
+            />
           </div>
         </div>
 
-        <div className="flex justify-between mt-4">
+        <div className="flex justify-between mt-8">
           <button
-            className="bg-blue-600 text-white py-2 px-6 rounded-lg font-semibold text-lg hover:bg-blue-700 transition duration-300 disabled:bg-blue-300"
-            disabled={isSubmitting}
+            type="submit"
+            className="bg-primary text-white py-3 px-8 rounded-full font-semibold text-lg hover:bg-primary-dark transition disabled:opacity-70"
+            disabled={loading}
           >
-            {isSubmitting ? "Saqlanmoqda..." : "Saqlash"}
+            {loading ? (
+              <>
+                <span className="inline-block animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-white mr-2"></span>
+                {id ? "Updating..." : "Creating..."}
+              </>
+            ) : id ? (
+              "Update Profile"
+            ) : (
+              "Create Profile"
+            )}
           </button>
 
           {id && (
             <button
               type="button"
               onClick={deletePlace}
-              className="bg-red-600 text-white py-2 px-6 rounded-lg font-semibold text-lg hover:bg-red-700 transition duration-300"
+              className="bg-red-600 text-white py-3 px-8 rounded-full font-semibold text-lg hover:bg-red-700 transition disabled:opacity-70"
+              disabled={loading}
             >
-              O'qituvchi profilini o'chirish
+              Delete Profile
             </button>
           )}
         </div>
