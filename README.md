@@ -11,27 +11,30 @@
 - **Оценка улучшенных каналов коммуникации** между студентами и преподавателями и их влияние на вовлеченность и качество обучения.
 - **Исследование роли прозрачности** в операционных процессах приложения для укрепления доверия и удовлетворенности студентов.
 - **Оценка дизайна и удобства приложения** на уровень вовлеченности пользователей, а также выявление лучших практик для образовательных платформ.
+
 ---
 
 ## 🚀 Запуск проекта | How to Run the Project
 
 ### 🖥 Backend
-1. Перейдите в папку `api`:  
+
+1. Перейдите в папку `api`:
    ```sh
    cd api
    ```
-2. Запустите сервер:  
+2. Запустите сервер:
    ```sh
    node index.js
    ```
 3. Сервер будет запущен по адресу: [`http://localhost:4000`](http://localhost:4000)
 
 ### 🎨 Frontend
-1. Перейдите в папку `client`:  
+
+1. Перейдите в папку `client`:
    ```sh
    cd client
    ```
-2. Запустите клиентскую часть:  
+2. Запустите клиентскую часть:
    ```sh
    npm run dev
    ```
@@ -40,26 +43,27 @@
 ---
 
 ## 📌 Технологии | Technologies Used
+
 - **Frontend:** React, Vite, Tailwind CSS
 - **Backend:** Node.js, Express
 - **Database:** MongoDB, AWS S3 storage
 
+---
 
 ## 🔑 Пароли | Passwords
-1. Пароль обычного юзера:  
+
+1. Пароль обычного юзера:
+
    ```sh
-   **name:**     Kim Pavel
-   **email:**    kim.doe@example.com
-   **password:** securepassword123
+   name:     Kim Pavel
+   email:    kim.doe@example.com
+   password: securepassword123
    ```
 
-2. Пароль обычного админа:  
+2. Пароль обычного админа:
    ```sh
-   **ADMIN_EMAIL**     admin@example.com
-   **ADMIN_PASSWORD**  StrongPassword123!
+   ADMIN_EMAIL     admin@example.com
+   ADMIN_PASSWORD  StrongPassword123!
    ```
-
-- **ADMIN_EMAIL** admin@example.com
-- **ADMIN_PASSWORD** StrongPassword123!
 
 ---
