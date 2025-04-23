@@ -50,20 +50,3 @@
 
 ---
 
-## 🔑 Пароли | Passwords
-
-1. Пароль обычного юзера:
-
-   ```sh
-   name:     Kim Pavel
-   email:    kim.doe@example.com
-   password: securepassword123
-   ```
-
-2. Пароль обычного админа:
-   ```sh
-   ADMIN_EMAIL:     admin@example.com
-   ADMIN_PASSWORD:  StrongPassword123!
-   ```
-
----
